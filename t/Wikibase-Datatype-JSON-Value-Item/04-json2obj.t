@@ -25,8 +25,7 @@ is($ret->type, 'item', 'Method type().');
 
 # Test.
 $json = <<'END';
-{
-}
+{}
 END
 eval {
 	Wikibase::Datatype::JSON::Value::Item::json2obj($json);
