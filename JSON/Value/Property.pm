@@ -145,20 +145,20 @@ Returns Wikibase::Datatype::Value::Property instance.
          'value' => 'P123',
  );
 
- # Get structure.
- my $struct_hr = obj2json($obj);
+ # Get JSON.
+ my $json = obj2json($obj, {'pretty' => 1});
 
- # Dump to output.
- p $struct_hr;
+ # Print to output.
+ print $json;
 
  # Output:
- # \ {
- #     type    "wikibase-entityid",
- #     value   {
- #         entity-type   "property",
- #         id            "P123",
- #         numeric-id    123
- #     }
+ # {
+ #    "type" : "wikibase-entityid",
+ #    "value" : {
+ #       "numeric-id" : 123,
+ #       "entity-type" : "property",
+ #       "id" : "P123"
+ #    }
  # }
 
 =head1 EXAMPLE2
@@ -168,18 +168,20 @@ Returns Wikibase::Datatype::Value::Property instance.
 
  use Wikibase::Datatype::JSON::Value::Property qw(json2obj);
 
- # Property structure.
- my $struct_hr = {
-         'type' => 'wikibase-entityid',
-         'value' => {
-                 'entity-type' => 'property',
-                 'id' => 'P123',
-                 'numeric-id' => 123,
-         },
- };
+ # Property JSON.
+ my $json = <<'END';
+ {
+    "type" : "wikibase-entityid",
+    "value" : {
+       "numeric-id" : 123,
+       "entity-type" : "property",
+       "id" : "P123"
+    }
+ }
+ END
 
  # Get object.
- my $obj = json2obj($struct_hr);
+ my $obj = json2obj($json);
 
  # Get value.
  my $value = $obj->value;

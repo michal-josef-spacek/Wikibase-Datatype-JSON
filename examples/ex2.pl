@@ -5,18 +5,20 @@ use warnings;
 
 use Wikibase::Datatype::JSON::Value::Property qw(json2obj);
 
-# Property structure.
-my $struct_hr = {
-        'type' => 'wikibase-entityid',
-        'value' => {
-                'entity-type' => 'property',
-                'id' => 'P123',
-                'numeric-id' => 123,
-        },
-};
+# Property JSON.
+my $json = <<'END';
+{
+   "type" : "wikibase-entityid",
+   "value" : {
+      "numeric-id" : 123,
+      "entity-type" : "property",
+      "id" : "P123"
+   }
+}
+END
 
 # Get object.
-my $obj = json2obj($struct_hr);
+my $obj = json2obj($json);
 
 # Get value.
 my $value = $obj->value;

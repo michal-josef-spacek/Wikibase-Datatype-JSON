@@ -12,18 +12,18 @@ my $obj = Wikibase::Datatype::Value::Property->new(
         'value' => 'P123',
 );
 
-# Get structure.
-my $struct_hr = obj2json($obj);
+# Get JSON.
+my $json = obj2json($obj, {'pretty' => 1});
 
-# Dump to output.
-p $struct_hr;
+# Print to output.
+print $json;
 
 # Output:
-# \ {
-#     type    "wikibase-entityid",
-#     value   {
-#         entity-type   "property",
-#         id            "P123",
-#         numeric-id    123
-#     }
+# {
+#    "type" : "wikibase-entityid",
+#    "value" : {
+#       "numeric-id" : 123,
+#       "entity-type" : "property",
+#       "id" : "P123"
+#    }
 # }
