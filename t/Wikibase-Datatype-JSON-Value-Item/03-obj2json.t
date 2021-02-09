@@ -14,7 +14,16 @@ my $obj = Wikibase::Datatype::Value::Item->new(
 	'value' => 'Q497',
 );
 my $json = Wikibase::Datatype::JSON::Value::Item::obj2json($obj);
-my $right_json = '{"value":{"numeric-id":497,"entity-type":"item","id":"Q497"},"type":"wikibase-entityid"}';
+my $right_json = <<'END';
+{
+  "value": {
+    "numeric-id": 497,
+    "entity-type": "item",
+    "id": "Q497"
+  },
+  "type": "wikibase-entityid"
+}
+END
 is_json($json, $right_json, 'Output of obj2json() subroutine.');
 
 # Test.
@@ -22,8 +31,17 @@ $obj = Wikibase::Datatype::Value::Item->new(
 	'value' => 'Q497',
 );
 $json = Wikibase::Datatype::JSON::Value::Item::obj2json($obj, {'pretty' => 1});
-$right_json = '{"value":{"numeric-id":497,"entity-type":"item","id":"Q497"},"type":"wikibase-entityid"}';
-is_json($json, $right_json, 'Output of obj2json() subroutine.');
+$right_json = <<'END';
+{
+  "value": {
+    "numeric-id": 497,
+    "entity-type": "item",
+    "id": "Q497"
+  },
+  "type": "wikibase-entityid"
+}
+END
+is_json($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
 
 # Test.
 eval {
