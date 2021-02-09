@@ -1,0 +1,72 @@
+NAME
+    Wikibase::Datatype::jSON - Wikibase structure JSON serialization.
+
+DESCRIPTION
+    This conversion is between objects defined in Wikibase::Datatype and
+    JSON structures serialized to MediaWiki.
+
+SEE ALSO
+    Wikibase::Datatype::JSON::Mediainfo
+        Wikibase mediainfo JSON structure serialization.
+
+    Wikibase::Datatype::JSON::MediainfoSnak
+        Wikibase mediainfo snak JSON structure serialization.
+
+    Wikibase::Datatype::JSON::MediainfoStatement
+        Wikibase mediainfo statement JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Reference
+        Wikibase reference JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Sitelink
+        Wikibase sitelink JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Snak
+        Wikibase snak JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Statement
+        Wikibase statement JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Utils
+        Wikibase structure JSON serialization utilities.
+
+    Wikibase::Datatype::JSON::Value
+        Wikibase value JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Value::Globecoordinate
+        Wikibase globe coordinate JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Value::Item
+        Wikibase item JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Value::Monolingual
+        Wikibase monolingual JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Value::Property
+        Wikibase property JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Value::Quantity
+        Wikibase quantity JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Value::String
+        Wikibase string JSON structure serialization.
+
+    Wikibase::Datatype::JSON::Value::Time
+        Wikibase time JSON structure serialization.
+
+REPOSITORY
+    <https://github.com/michal-josef-spacek/Wikibase-Datatype-JSON>
+
+AUTHOR
+    Michal Josef Špaček <mailto:skim@cpan.org>
+
+    <http://skim.cz>
+
+LICENSE AND COPYRIGHT
+    © Michal Josef Špaček 2021
+
+    BSD 2-Clause License
+
+VERSION
+    0.01
+
