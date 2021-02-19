@@ -5,6 +5,8 @@ examples/ex3.pl
 examples/ex4.pl
 examples/ex5.pl
 examples/ex6.pl
+examples/ex7.pl
+examples/ex8.pl
 inc/Module/Install.pm
 inc/Module/Install/AuthorRequires.pm
 inc/Module/Install/AuthorTests.pm
@@ -19,6 +21,7 @@ inc/Module/Install/WriteAll.pm
 JSON.pm
 JSON/Value/Globecoordinate.pm
 JSON/Value/Item.pm
+JSON/Value/Monolingual.pm
 JSON/Value/Property.pm
 LICENSE
 Makefile.PL
@@ -31,6 +34,10 @@ t/Wikibase-Datatype-JSON-Value-Item/01-use.t
 t/Wikibase-Datatype-JSON-Value-Item/02-version.t
 t/Wikibase-Datatype-JSON-Value-Item/03-obj2json.t
 t/Wikibase-Datatype-JSON-Value-Item/04-json2obj.t
+t/Wikibase-Datatype-JSON-Value-Monolingual/01-use.t
+t/Wikibase-Datatype-JSON-Value-Monolingual/02-version.t
+t/Wikibase-Datatype-JSON-Value-Monolingual/03-obj2json.t
+t/Wikibase-Datatype-JSON-Value-Monolingual/04-json2obj.t
 t/Wikibase-Datatype-JSON-Value-Property/01-use.t
 t/Wikibase-Datatype-JSON-Value-Property/02-version.t
 t/Wikibase-Datatype-JSON-Value-Property/03-obj2json.t
@@ -41,6 +48,8 @@ xt/Wikibase-Datatype-JSON-Value-Globecoordinate/01-pod_coverage.t
 xt/Wikibase-Datatype-JSON-Value-Globecoordinate/02-pod.t
 xt/Wikibase-Datatype-JSON-Value-Item/01-pod_coverage.t
 xt/Wikibase-Datatype-JSON-Value-Item/02-pod.t
+xt/Wikibase-Datatype-JSON-Value-Monolingual/01-pod_coverage.t
+xt/Wikibase-Datatype-JSON-Value-Monolingual/02-pod.t
 xt/Wikibase-Datatype-JSON-Value-Property/01-pod_coverage.t
 xt/Wikibase-Datatype-JSON-Value-Property/02-pod.t
 xt/Wikibase-Datatype-JSON/01-pod_coverage.t

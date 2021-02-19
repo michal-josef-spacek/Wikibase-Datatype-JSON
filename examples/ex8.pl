@@ -3,16 +3,16 @@
 use strict;
 use warnings;
 
-use Wikibase::Datatype::JSON::Value::Property qw(json2obj);
+use Wikibase::Datatype::JSON::Value::Item qw(json2obj);
 
-# Property JSON.
+# JSON string.
 my $json = <<'END';
 {
    "type" : "wikibase-entityid",
    "value" : {
+      "entity-type" : "item",
       "numeric-id" : 123,
-      "entity-type" : "property",
-      "id" : "P123"
+      "id" : "Q123"
    }
 }
 END
@@ -31,5 +31,5 @@ print "Type: $type\n";
 print "Value: $value\n";
 
 # Output:
-# Type: property
-# Value: P123
+# Type: item
+# Value: Q123

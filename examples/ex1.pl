@@ -3,27 +3,26 @@
 use strict;
 use warnings;
 
-use Data::Printer;
-use Wikibase::Datatype::JSON::Value::Property qw(obj2json);
-use Wikibase::Datatype::Value::Property;
+use Wikibase::Datatype::Value::Monolingual;
+use Wikibase::Datatype::JSON::Value::Monolingual qw(obj2json);
 
 # Object.
-my $obj = Wikibase::Datatype::Value::Property->new(
-        'value' => 'P123',
+my $obj = Wikibase::Datatype::Value::Monolingual->new(
+        'language' => 'en',
+        'value' => 'English text',
 );
 
 # Get JSON.
-my $json = obj2json($obj, {'pretty' => 1});
+my $json = obj2json($obj, { pretty => 1 });
 
 # Print to output.
 print $json;
 
 # Output:
 # {
-#    "type" : "wikibase-entityid",
 #    "value" : {
-#       "numeric-id" : 123,
-#       "entity-type" : "property",
-#       "id" : "P123"
-#    }
+#       "language" : "en",
+#       "text" : "English text"
+#    },
+#    "type" : "monolingualtext"
 # }
