@@ -148,7 +148,6 @@ Returns Wikibase::Datatype::Value::Globecoordinate instance.
  use strict;
  use warnings;
 
- use Data::Printer;
  use Wikibase::Datatype::Value::Globecoordinate;
  use Wikibase::Datatype::JSON::Value::Globecoordinate qw(obj2json);
 

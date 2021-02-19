@@ -136,7 +136,6 @@ Returns Wikibase::Datatype::Value::Property instance.
  use strict;
  use warnings;
 
- use Data::Printer;
  use Wikibase::Datatype::JSON::Value::Property qw(obj2json);
  use Wikibase::Datatype::Value::Property;
 

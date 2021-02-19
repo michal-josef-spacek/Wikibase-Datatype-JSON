@@ -109,7 +109,7 @@ serialized via JSON to MediaWiki.
 
  my $json = obj2json($obj, $opts_hr);
 
-Convert Wikibase::Datatype::Value::Item instance to structure.
+Convert Wikibase::Datatype::Value::Item instance to JSON structure.
 C<$opts_hr> are optional settings. There is 'pretty' flag for pretty print (0/1).
 
 Returns JSON string.
@@ -136,7 +136,6 @@ Returns Wikibase::Datatype::Value::Item instance.
  use strict;
  use warnings;
 
- use Data::Printer;
  use Wikibase::Datatype::Value::Item;
  use Wikibase::Datatype::JSON::Value::Item qw(obj2json);
 
