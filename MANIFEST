@@ -1,5 +1,6 @@
 Changes
 examples/ex1.pl
+examples/ex10.pl
 examples/ex2.pl
 examples/ex3.pl
 examples/ex4.pl
@@ -7,6 +8,7 @@ examples/ex5.pl
 examples/ex6.pl
 examples/ex7.pl
 examples/ex8.pl
+examples/ex9.pl
 inc/Module/Install.pm
 inc/Module/Install/AuthorRequires.pm
 inc/Module/Install/AuthorTests.pm
@@ -23,6 +25,7 @@ JSON/Value/Globecoordinate.pm
 JSON/Value/Item.pm
 JSON/Value/Monolingual.pm
 JSON/Value/Property.pm
+JSON/Value/Quantity.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
@@ -42,6 +45,10 @@ t/Wikibase-Datatype-JSON-Value-Property/01-use.t
 t/Wikibase-Datatype-JSON-Value-Property/02-version.t
 t/Wikibase-Datatype-JSON-Value-Property/03-obj2json.t
 t/Wikibase-Datatype-JSON-Value-Property/04-json2obj.t
+t/Wikibase-Datatype-JSON-Value-Quantity/01-use.t
+t/Wikibase-Datatype-JSON-Value-Quantity/02-version.t
+t/Wikibase-Datatype-JSON-Value-Quantity/03-obj2json.t
+t/Wikibase-Datatype-JSON-Value-Quantity/04-json2obj.t
 t/Wikibase-Datatype-JSON/01-use.t
 t/Wikibase-Datatype-JSON/02-version.t
 xt/Wikibase-Datatype-JSON-Value-Globecoordinate/01-pod_coverage.t
@@ -52,5 +59,7 @@ xt/Wikibase-Datatype-JSON-Value-Monolingual/01-pod_coverage.t
 xt/Wikibase-Datatype-JSON-Value-Monolingual/02-pod.t
 xt/Wikibase-Datatype-JSON-Value-Property/01-pod_coverage.t
 xt/Wikibase-Datatype-JSON-Value-Property/02-pod.t
+xt/Wikibase-Datatype-JSON-Value-Quantity/01-pod_coverage.t
+xt/Wikibase-Datatype-JSON-Value-Quantity/02-pod.t
 xt/Wikibase-Datatype-JSON/01-pod_coverage.t
 xt/Wikibase-Datatype-JSON/02-pod.t
