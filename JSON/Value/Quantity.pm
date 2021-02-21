@@ -264,6 +264,8 @@ Returns Wikibase::Datatype::Value::Quantity instance.
 
 =head1 DEPENDENCIES
 
+L<Cpanel::JSON::XS>,
+L<Cpanel::JSON::XS::Type>,
 L<Error::Pure>,
 L<Exporter>,
 L<Readonly>,
