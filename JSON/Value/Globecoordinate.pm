@@ -121,9 +121,12 @@ serialized via JSON to MediaWiki.
  my $json = obj2json($obj, $opts_hr);
 
 Convert Wikibase::Datatype::Value::Globecoordinate instance to JSON structure.
-C<$base_uri> is base URI of Wikibase system (e.g. http://test.wikidata.org/entity/).
+C<$opts_hr> is reference to hash with parameters:
 
-Returns reference to hash with structure.
+ 'pretty' flag for pretty print (0/1).
+ 'base_uri' is base URI of Wikibase system (e.g. http://test.wikidata.org/entity/).
+
+Returns JSON string.
 
 =head2 C<json2obj>
 
