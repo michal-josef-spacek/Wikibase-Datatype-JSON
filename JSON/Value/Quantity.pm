@@ -141,13 +141,13 @@ __END__
 
 =head1 NAME
 
-Wikibase::Datatype::JSON::Value::Quantity - Wikibase quantity structure serialization.
+Wikibase::Datatype::JSON::Value::Quantity - Wikibase quantity JSON structure serialization.
 
 =head1 SYNOPSIS
 
  use Wikibase::Datatype::JSON::Value::Quantity qw(obj2json json2obj);
 
- my $struct_hr = obj2json($obj, $opts_hr);
+ my $json = obj2json($obj, $opts_hr);
  my $obj = json2obj($json);
 
 =head1 DESCRIPTION
@@ -159,7 +159,7 @@ serialized via JSON to MediaWiki.
 
 =head2 C<obj2json>
 
- my $struct_hr = obj2json($obj, $opts_hr);
+ my $json = obj2json($obj, $opts_hr);
 
 Convert Wikibase::Datatype::Value::Quantity instance to structure.
 C<$opts_hr> is reference to hash with parameters:
