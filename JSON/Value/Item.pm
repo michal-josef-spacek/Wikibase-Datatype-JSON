@@ -33,10 +33,12 @@ sub obj2json {
 
 	my $numeric_id = $obj->value;
 	$numeric_id =~ s/^Q//ms;
+
 	my $json_o = Cpanel::JSON::XS->new;
 	if ($opts_hr->{'pretty'}) {
 		$json_o = $json_o->pretty;
 	}
+
 	my $json = $json_o->encode({
 		'value' => {
 			'entity-type' => $obj->type,
