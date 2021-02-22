@@ -3,24 +3,18 @@
 use strict;
 use warnings;
 
-use Wikibase::Datatype::JSON::Value::Monolingual qw(json2obj);
+use Wikibase::Datatype::JSON::Value::String qw(json2obj);
 
-# Monolingualtext JSON structure.
+# JSON structure.
 my $json = <<'END';
 {
-   "value" : {
-      "language" : "en",
-      "text" : "English text"
-   },
-   "type" : "monolingualtext"
+   "value" : "foo",
+   "type" : "string"
 }
 END
 
 # Get object.
 my $obj = json2obj($json);
-
-# Get language.
-my $language = $obj->language;
 
 # Get type.
 my $type = $obj->type;
@@ -29,11 +23,9 @@ my $type = $obj->type;
 my $value = $obj->value;
 
 # Print out.
-print "Language: $language\n";
 print "Type: $type\n";
 print "Value: $value\n";
 
 # Output:
-# Language: en
-# Type: monolingualtext
-# Value: English text
+# Type: string
+# Value: foo

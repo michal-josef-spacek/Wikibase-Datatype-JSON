@@ -3,39 +3,33 @@
 use strict;
 use warnings;
 
-use Wikibase::Datatype::JSON::Value::Quantity qw(json2obj);
+use Wikibase::Datatype::JSON::Value::Item qw(json2obj);
 
-# Quantity structure.
+# JSON string.
 my $json = <<'END';
 {
+   "type" : "wikibase-entityid",
    "value" : {
-      "amount" : "+10",
-      "unit" : "http://test.wikidata.org/entity/Q190900"
-   },
-   "type" : "quantity"
+      "entity-type" : "item",
+      "numeric-id" : 123,
+      "id" : "Q123"
+   }
 }
 END
 
 # Get object.
 my $obj = json2obj($json);
 
-# Get type.
-my $type = $obj->type;
-
-# Get unit.
-my $unit = $obj->unit;
-
 # Get value.
 my $value = $obj->value;
 
+# Get type.
+my $type = $obj->type;
+
 # Print out.
 print "Type: $type\n";
-if (defined $unit) {
-        print "Unit: $unit\n";
-}
 print "Value: $value\n";
 
 # Output:
-# Type: quantity
-# Unit: Q190900
-# Value: 10
+# Type: item
+# Value: Q123

@@ -3,33 +3,37 @@
 use strict;
 use warnings;
 
-use Wikibase::Datatype::JSON::Value::Property qw(json2obj);
+use Wikibase::Datatype::JSON::Value::Monolingual qw(json2obj);
 
-# Property JSON.
+# Monolingualtext JSON structure.
 my $json = <<'END';
 {
-   "type" : "wikibase-entityid",
    "value" : {
-      "numeric-id" : 123,
-      "entity-type" : "property",
-      "id" : "P123"
-   }
+      "language" : "en",
+      "text" : "English text"
+   },
+   "type" : "monolingualtext"
 }
 END
 
 # Get object.
 my $obj = json2obj($json);
 
-# Get value.
-my $value = $obj->value;
+# Get language.
+my $language = $obj->language;
 
 # Get type.
 my $type = $obj->type;
 
+# Get value.
+my $value = $obj->value;
+
 # Print out.
+print "Language: $language\n";
 print "Type: $type\n";
 print "Value: $value\n";
 
 # Output:
-# Type: property
-# Value: P123
+# Language: en
+# Type: monolingualtext
+# Value: English text
