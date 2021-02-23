@@ -3,30 +3,26 @@
 use strict;
 use warnings;
 
-use Data::Printer;
-use Wikibase::Datatype::Value::Quantity;
-use Wikibase::Datatype::JSON::Value::Quantity qw(obj2json);
+use Wikibase::Datatype::Value::Item;
+use Wikibase::Datatype::JSON::Value::Item qw(obj2json);
 
 # Object.
-my $obj = Wikibase::Datatype::Value::Quantity->new(
-        'unit' => 'Q190900',
-        'value' => 10,
+my $obj = Wikibase::Datatype::Value::Item->new(
+        'value' => 'Q123',
 );
 
-# Get JSON.
-my $json = obj2json($obj, {
-        'base_uri' => 'http://test.wikidata.org/entity/',
-        'pretty' => 1,
-});
+# Get JSON string.
+my $json = obj2json($obj, {'pretty' => 1});
 
-# Print to output.
+# Print out.
 print $json;
 
 # Output:
 # {
+#    "type" : "wikibase-entityid",
 #    "value" : {
-#       "amount" : "+10",
-#       "unit" : "http://test.wikidata.org/entity/Q190900"
-#    },
-#    "type" : "quantity"
+#       "entity-type" : "item",
+#       "numeric-id" : 123,
+#       "id" : "Q123"
+#    }
 # }
