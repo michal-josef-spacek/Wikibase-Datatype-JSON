@@ -52,7 +52,7 @@ sub obj2json {
 		'type' => $obj->type,
 	}, {
 		'value' => {
-			'altitude' => JSON_TYPE_STRING_OR_NULL,
+			'altitude' => JSON_TYPE_FLOAT_OR_NULL,
 			'globe' => JSON_TYPE_STRING,
 			'latitude' => JSON_TYPE_FLOAT,
 			'longitude' => JSON_TYPE_FLOAT,
