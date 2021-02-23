@@ -3,7 +3,7 @@ use warnings;
 
 use English;
 use Error::Pure::Utils qw(clean);
-use Test::JSON;
+use Test::JSON::Type;
 use Test::More 'tests' => 5;
 use Test::NoWarnings;
 use Wikibase::Datatype::Value::String;
@@ -20,7 +20,7 @@ my $right_json = <<'END';
   "type": "string"
 }
 END
-is_json($json, $right_json, 'Output of obj2json() subroutine.');
+is_json_type($json, $right_json, 'Output of obj2json() subroutine.');
 
 # Test
 $json = Wikibase::Datatype::JSON::Value::String::obj2json($obj);
@@ -30,7 +30,7 @@ $right_json = <<'END';
   "type": "string"
 }
 END
-is_json($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
+is_json_type($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
 
 # Test.
 eval {

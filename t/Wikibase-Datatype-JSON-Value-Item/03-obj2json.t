@@ -3,7 +3,7 @@ use warnings;
 
 use English;
 use Error::Pure::Utils qw(clean);
-use Test::JSON;
+use Test::JSON::Type;
 use Test::More 'tests' => 5;
 use Test::NoWarnings;
 use Wikibase::Datatype::Value::Item;
@@ -24,7 +24,7 @@ my $right_json = <<'END';
   "type": "wikibase-entityid"
 }
 END
-is_json($json, $right_json, 'Output of obj2json() subroutine.');
+is_json_type($json, $right_json, 'Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value::Item->new(
@@ -41,7 +41,7 @@ $right_json = <<'END';
   "type": "wikibase-entityid"
 }
 END
-is_json($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
+is_json_type($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
 
 # Test.
 eval {

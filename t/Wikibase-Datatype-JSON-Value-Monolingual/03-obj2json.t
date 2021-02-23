@@ -3,7 +3,7 @@ use warnings;
 
 use English;
 use Error::Pure::Utils qw(clean);
-use Test::JSON;
+use Test::JSON::Type;
 use Test::More 'tests' => 5;
 use Test::NoWarnings;
 use Unicode::UTF8 qw(decode_utf8 encode_utf8);
@@ -25,7 +25,7 @@ my $right_json = decode_utf8(<<'END');
   "type": "monolingualtext"
 }
 END
-is_json(encode_utf8($json), encode_utf8($right_json),
+is_json_type(encode_utf8($json), encode_utf8($right_json),
 	'Output of obj2json() subroutine.');
 
 # Test.
@@ -43,7 +43,7 @@ $right_json = decode_utf8(<<'END');
   "type": "monolingualtext"
 }
 END
-is_json(encode_utf8($json), encode_utf8($right_json),
+is_json_type(encode_utf8($json), encode_utf8($right_json),
 	'Output of obj2json() subroutine (pretty print).');
 
 # Test.
