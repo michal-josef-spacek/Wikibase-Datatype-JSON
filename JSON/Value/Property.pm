@@ -8,6 +8,7 @@ use Cpanel::JSON::XS;
 use Cpanel::JSON::XS::Type;
 use Error::Pure qw(err);
 use Readonly;
+use Wikibase::Datatype::Struct::Value::Property;
 use Wikibase::Datatype::Value::Property;
 
 Readonly::Array our @EXPORT_OK => qw(obj2json json2obj);
@@ -62,22 +63,7 @@ sub json2obj {
 
 	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
 
-	if (! exists $struct_hr->{'type'}
-		|| ! defined $struct_hr->{'type'}
-		|| $struct_hr->{'type'} ne 'wikibase-entityid'
-		|| ! exists $struct_hr->{'value'}
-		|| ! exists $struct_hr->{'value'}->{'entity-type'}
-		|| ! defined $struct_hr->{'value'}->{'entity-type'}
-		|| $struct_hr->{'value'}->{'entity-type'} ne 'property') {
-
-		err "Structure isn't for 'property' datatype.";
-	}
-
-	my $obj = Wikibase::Datatype::Value::Property->new(
-		'value' => $struct_hr->{'value'}->{'id'},
-	);
-
-	return $obj;
+	return Wikibase::Datatype::Struct::Value::Property::struct2obj($struct_hr);
 }
 
 1;
@@ -129,7 +115,8 @@ Returns Wikibase::Datatype::Value::Property instance.
          Object isn't 'Wikibase::Datatype::Value::Property'.
 
  json2obj():
-         Structure isn't for 'property' datatype.
+         From Wikibase::Datatype::Struct::Value::Property::struct2obj():
+                 Structure isn't for 'property' datatype.
 
 =head1 EXAMPLE1
 
@@ -203,6 +190,7 @@ L<Cpanel::JSON::XS::Type>,
 L<Error::Pure>,
 L<Exporter>,
 L<Readonly>,
+L<Wikibase::Datatype::Struct::Value::Property>,
 L<Wikibase::Datatype::Value::Property>.
 
 =head1 SEE ALSO

@@ -8,6 +8,7 @@ use Cpanel::JSON::XS;
 use Cpanel::JSON::XS::Type;
 use Error::Pure qw(err);
 use Readonly;
+use Wikibase::Datatype::Struct::Value::Monolingual;
 use Wikibase::Datatype::Value::Monolingual;
 
 Readonly::Array our @EXPORT_OK => qw(obj2json json2obj);
@@ -57,18 +58,7 @@ sub json2obj {
 
 	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
 
-	if (! exists $struct_hr->{'type'}
-		|| $struct_hr->{'type'} ne 'monolingualtext') {
-
-		err "Structure isn't for 'monolingualtext' datatype.";
-	}
-
-	my $obj = Wikibase::Datatype::Value::Monolingual->new(
-		'language' => $struct_hr->{'value'}->{'language'},
-		'value' => $struct_hr->{'value'}->{'text'},
-	);
-
-	return $obj;
+	return Wikibase::Datatype::Struct::Value::Monolingual::struct2obj($struct_hr);
 }
 
 1;
@@ -121,7 +111,8 @@ Returns Wikibase::Datatype::Value::Monolingual instance.
          Object isn't 'Wikibase::Datatype::Value::Monolingual'.
 
  json2obj():
-         Structure isn't for 'monolingualtext' datatype.
+         From Wikibase::Datatype::Struct::Value::Monolingual::struct2obj():
+                 Structure isn't for 'monolingualtext' datatype.
 
 =head1 EXAMPLE1
 
@@ -199,6 +190,7 @@ L<Cpanel::JSON::XS::Type>,
 L<Error::Pure>,
 L<Exporter>,
 L<Readonly>,
+L<Wikibase::Datatype::Struct::Value::Monolingual>,
 L<Wikibase::Datatype::Value::Monolingual>.
 
 =head1 SEE ALSO

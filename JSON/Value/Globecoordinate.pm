@@ -9,6 +9,7 @@ use Cpanel::JSON::XS::Type;
 use Error::Pure qw(err);
 use Readonly;
 use URI;
+use Wikibase::Datatype::Struct::Value::Globecoordinate;
 use Wikibase::Datatype::Value::Globecoordinate;
 
 Readonly::Array our @EXPORT_OK => qw(obj2json json2obj);
@@ -68,26 +69,7 @@ sub json2obj {
 
 	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
 
-	if (! exists $struct_hr->{'type'}
-		|| $struct_hr->{'type'} ne 'globecoordinate') {
-
-		err "Structure isn't for 'globecoordinate' datatype.";
-	}
-
-	my $u = URI->new($struct_hr->{'value'}->{'globe'});
-	my @path_segments = $u->path_segments;
-	my $globe = $path_segments[-1];
-	my $obj = Wikibase::Datatype::Value::Globecoordinate->new(
-		'altitude' => $struct_hr->{'value'}->{'altitude'},
-		'globe' => $globe,
-		'precision' => $struct_hr->{'value'}->{'precision'},
-		'value' => [
-			$struct_hr->{'value'}->{'latitude'},
-			$struct_hr->{'value'}->{'longitude'},
-		],
-	);
-
-	return $obj;
+	return Wikibase::Datatype::Struct::Value::Globecoordinate::struct2obj($struct_hr);
 }
 
 1;
@@ -144,7 +126,8 @@ Returns Wikibase::Datatype::Value::Globecoordinate instance.
          Parameter 'base_uri' is required.
 
  json2obj():
-         Structure isn't for 'globecoordinate' datatype.
+         From Wikibase::Datatype::Struct::Value::Globecoordinate::struct2obj():
+                 Structure isn't for 'globecoordinate' datatype.
 
 =head1 EXAMPLE1
 
@@ -244,6 +227,7 @@ L<Error::Pure>,
 L<Exporter>,
 L<Readonly>,
 L<URI>,
+L<Wikibase::Datatype::Struct::Value::Globecoordinate>,
 L<Wikibase::Datatype::Value::Globecoordinate>.
 
 =head1 SEE ALSO

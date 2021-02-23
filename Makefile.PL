@@ -26,6 +26,7 @@ requires 'List::MoreUtils' => 0;
 requires 'Readonly' => 0;
 requires 'URI' => 0;
 requires 'Wikibase::Datatype' => 0.07;
+requires 'Wikibase::Datatype::Struct' => 0.08;
 resources 'bugtracker' => 'https://github.com/michal-josef-spacek/Wikibase-Datatype-JSON/issues',
 resources 'homepage' => 'https://github.com/michal-josef-spacek/Wikibase-Datatype-JSON';
 resources 'repository' => 'git://github.com/michal-josef-spacek/Wikibase-Datatype-JSON';
