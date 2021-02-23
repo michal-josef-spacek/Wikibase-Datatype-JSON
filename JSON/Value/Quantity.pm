@@ -164,8 +164,8 @@ serialized via JSON to MediaWiki.
 Convert Wikibase::Datatype::Value::Quantity instance to structure.
 C<$opts_hr> is reference to hash with parameters:
 
- 'pretty' flag for pretty print (0/1).
  'base_uri' is base URI of Wikibase system (e.g. http://test.wikidata.org/entity/).
+ 'pretty' flag for pretty print (0/1).
 
 Returns JSON string.
 
