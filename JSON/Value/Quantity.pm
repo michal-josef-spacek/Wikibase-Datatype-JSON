@@ -192,7 +192,6 @@ Returns Wikibase::Datatype::Value::Quantity instance.
  use strict;
  use warnings;
 
- use Data::Printer;
  use Wikibase::Datatype::Value::Quantity;
  use Wikibase::Datatype::JSON::Value::Quantity qw(obj2json);
 

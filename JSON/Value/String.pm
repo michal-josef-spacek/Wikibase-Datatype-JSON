@@ -122,7 +122,6 @@ Returns Wikibase::Datatype::Value::String instance.
  use strict;
  use warnings;
 
- use Data::Printer;
  use Wikibase::Datatype::Value::String;
  use Wikibase::Datatype::JSON::Value::String qw(obj2json);
 

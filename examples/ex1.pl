@@ -3,7 +3,6 @@
 use strict;
 use warnings;
 
-use Data::Printer;
 use Wikibase::Datatype::Value::Time;
 use Wikibase::Datatype::JSON::Value::Time qw(obj2json);
 
