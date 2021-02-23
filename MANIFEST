@@ -39,6 +39,8 @@ META.yml
 README
 t/Wikibase-Datatype-JSON-Value-Globecoordinate/01-use.t
 t/Wikibase-Datatype-JSON-Value-Globecoordinate/02-version.t
+t/Wikibase-Datatype-JSON-Value-Globecoordinate/03-obj2json.t
+t/Wikibase-Datatype-JSON-Value-Globecoordinate/04-json2obj.t
 t/Wikibase-Datatype-JSON-Value-Item/01-use.t
 t/Wikibase-Datatype-JSON-Value-Item/02-version.t
 t/Wikibase-Datatype-JSON-Value-Item/03-obj2json.t
