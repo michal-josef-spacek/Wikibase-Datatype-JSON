@@ -3,19 +3,19 @@
 use strict;
 use warnings;
 
-use Wikibase::Datatype::JSON::Value::Time qw(json2obj);
+use Wikibase::Datatype::JSON::Value qw(json2obj);
 
-# Time structure.
+# Time JSON structure.
 my $json = <<'END';
 {
    "type" : "time",
    "value" : {
-      "timezone" : 0,
+      "after" : 0,
       "before" : 0,
-      "precision" : 10,
       "calendarmodel" : "http://test.wikidata.org/entity/Q1985727",
+      "precision" : 10,
       "time" : "+2020-09-01T00:00:00Z",
-      "after" : 0
+      "timezone" : 0
    }
 }
 END

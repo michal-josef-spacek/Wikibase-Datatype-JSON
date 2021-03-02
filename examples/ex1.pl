@@ -3,8 +3,9 @@
 use strict;
 use warnings;
 
+use Data::Printer;
 use Wikibase::Datatype::Value::Time;
-use Wikibase::Datatype::JSON::Value::Time qw(obj2json);
+use Wikibase::Datatype::JSON::Value qw(obj2json);
 
 # Object.
 my $obj = Wikibase::Datatype::Value::Time->new(
@@ -21,15 +22,15 @@ my $json = obj2json($obj, {
 # Print to output.
 print $json;
 
-# Output:
+# Output like:
 # {
 #    "type" : "time",
 #    "value" : {
-#       "timezone" : 0,
+#       "after" : 0,
 #       "before" : 0,
-#       "precision" : 10,
 #       "calendarmodel" : "http://test.wikidata.org/entity/Q1985727",
+#       "precision" : 10,
 #       "time" : "+2020-09-01T00:00:00Z",
-#       "after" : 0
+#       "timezone" : 0
 #    }
 # }

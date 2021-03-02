@@ -3,22 +3,33 @@
 use strict;
 use warnings;
 
-use Wikibase::Datatype::Value::String;
-use Wikibase::Datatype::JSON::Value::String qw(obj2json);
+use Wikibase::Datatype::Value::Time;
+use Wikibase::Datatype::JSON::Value::Time qw(obj2json);
 
 # Object.
-my $obj = Wikibase::Datatype::Value::String->new(
-        'value' => 'foo',
+my $obj = Wikibase::Datatype::Value::Time->new(
+        'precision' => 10,
+        'value' => '+2020-09-01T00:00:00Z',
 );
 
-# Get JSON string.
-my $json = obj2json($obj, {'pretty' => 1});
+# Get JSON.
+my $json = obj2json($obj, {
+        'base_uri' => 'http://test.wikidata.org/entity/',
+        'pretty' => 1,
+});
 
-# Print out.
+# Print to output.
 print $json;
 
 # Output:
 # {
-#    "value" : "foo",
-#    "type" : "string"
+#    "type" : "time",
+#    "value" : {
+#       "timezone" : 0,
+#       "before" : 0,
+#       "precision" : 10,
+#       "calendarmodel" : "http://test.wikidata.org/entity/Q1985727",
+#       "time" : "+2020-09-01T00:00:00Z",
+#       "after" : 0
+#    }
 # }
