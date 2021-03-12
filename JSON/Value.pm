@@ -29,7 +29,14 @@ Readonly::Array our @EXPORT_OK => qw(obj2json json2obj);
 our $VERSION = 0.01;
 
 sub obj2json {
-	my ($obj, $base_uri) = @_;
+	my ($obj, $opts_hr) = @_;
+
+	if (! defined $opts_hr) {
+		$opts_hr = {};
+	}
+	if (! exists $opts_hr->{'pretty'}) {
+		$opts_hr->{'pretty'} = 0;
+	}
 
 	if (! defined $obj) {
 		err "Object doesn't exist.";
@@ -38,27 +45,31 @@ sub obj2json {
 		err "Object isn't 'Wikibase::Datatype::Value'.";
 	}
 
-	my $struct_hr;
+	if (! exists $opts_hr->{'base_uri'} || ! defined $opts_hr->{'base_uri'}) {
+		err "Parameter 'base_uri' is required.";
+	}
+
+	my $json;
 	my $type = $obj->type;
 	if ($type eq 'globecoordinate') {
-		$struct_hr = Wikibase::Datatype::JSON::Value::Globecoordinate::obj2json($obj, $base_uri);
+		$json = Wikibase::Datatype::JSON::Value::Globecoordinate::obj2json($obj, $opts_hr);
 	} elsif ($type eq 'item') {
-		$struct_hr = Wikibase::Datatype::JSON::Value::Item::obj2json($obj);
+		$json = Wikibase::Datatype::JSON::Value::Item::obj2json($obj, $opts_hr);
 	} elsif ($type eq 'monolingualtext') {
-		$struct_hr = Wikibase::Datatype::JSON::Value::Monolingual::obj2json($obj);
+		$json = Wikibase::Datatype::JSON::Value::Monolingual::obj2json($obj, $opts_hr);
 	} elsif ($type eq 'property') {
-		$struct_hr = Wikibase::Datatype::JSON::Value::Property::obj2json($obj);
+		$json = Wikibase::Datatype::JSON::Value::Property::obj2json($obj, $opts_hr);
 	} elsif ($type eq 'quantity') {
-		$struct_hr = Wikibase::Datatype::JSON::Value::Quantity::obj2json($obj, $base_uri);
+		$json = Wikibase::Datatype::JSON::Value::Quantity::obj2json($obj, $opts_hr);
 	} elsif ($type eq 'string') {
-		$struct_hr = Wikibase::Datatype::JSON::Value::String::obj2json($obj);
+		$json = Wikibase::Datatype::JSON::Value::String::obj2json($obj, $opts_hr);
 	} elsif ($type eq 'time') {
-		$struct_hr = Wikibase::Datatype::JSON::Value::Time::obj2json($obj, $base_uri);
+		$json = Wikibase::Datatype::JSON::Value::Time::obj2json($obj, $opts_hr);
 	} else {
 		err "Type '$type' is unsupported.";
 	}
 
-	return $struct_hr;
+	return $json;
 }
 
 sub json2obj {
@@ -148,6 +159,7 @@ Returns Wikibase::Datatype::Value instance.
          Object doesn't exist.
          Object isn't 'Wikibase::Datatype::Value'.
          Type '%s' is unsupported.
+         Parameter 'base_uri' is required.
 
  json2obj():
          Entity type '%s' is unsupported.
@@ -242,6 +254,8 @@ Returns Wikibase::Datatype::Value instance.
 
 =head1 DEPENDENCIES
 
+L<Cpanel::JSON::XS>,
+L<Cpanel::JSON::XS::Type>,
 L<Error::Pure>,
 L<Exporter>,
 L<Readonly>,

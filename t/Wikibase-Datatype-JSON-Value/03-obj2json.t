@@ -41,7 +41,9 @@ is_json_type($json, $right_json, 'Globecoordinate: Output of obj2json() subrouti
 $obj = Wikibase::Datatype::Value::Item->new(
 	'value' => 'Q497',
 );
-$json = Wikibase::Datatype::JSON::Value::obj2json($obj);
+$json = Wikibase::Datatype::JSON::Value::obj2json($obj, {
+	'base_uri' => 'http://test.wikidata.org/entity/',
+});
 $right_json = <<'END';
 {
   "value": {
@@ -59,7 +61,9 @@ $obj = Wikibase::Datatype::Value::Monolingual->new(
 	'language' => 'cs',
 	'value' => decode_utf8('Příklad.'),
 );
-$json = Wikibase::Datatype::JSON::Value::obj2json($obj);
+$json = Wikibase::Datatype::JSON::Value::obj2json($obj, {
+	'base_uri' => 'http://test.wikidata.org/entity/',
+});
 $right_json = decode_utf8(<<'END');
 {
   "value": {
@@ -113,7 +117,9 @@ is_json_type($json, $right_json, 'Quantity: Output of obj2json() subroutine.');
 $obj = Wikibase::Datatype::Value::String->new(
 	'value' => 'Text',
 );
-$json = Wikibase::Datatype::JSON::Value::obj2json($obj);
+$json = Wikibase::Datatype::JSON::Value::obj2json($obj, {
+	'base_uri' => 'http://test.wikidata.org/entity/',
+});
 $right_json = <<'END';
 {
   "value": "Text",
@@ -150,7 +156,9 @@ $obj = Wikibase::Datatype::Value->new(
 	'type' => 'bad',
 );
 eval {
-	Wikibase::Datatype::JSON::Value::obj2json($obj);
+	Wikibase::Datatype::JSON::Value::obj2json($obj, {
+		'base_uri' => 'http://test.wikidata.org/entity/',
+	});
 };
 is($EVAL_ERROR, "Type 'bad' is unsupported.\n",
 	"Type 'bad' is unsupported.");
@@ -158,7 +166,9 @@ clean();
 
 # Test.
 eval {
-	Wikibase::Datatype::JSON::Value::obj2json('bad');
+	Wikibase::Datatype::JSON::Value::obj2json('bad', {
+		'base_uri' => 'http://test.wikidata.org/entity/',
+	});
 };
 is($EVAL_ERROR, "Object isn't 'Wikibase::Datatype::Value'.\n",
 	"Object isn't 'Wikibase::Datatype::Value'.");
