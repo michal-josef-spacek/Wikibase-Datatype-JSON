@@ -24,7 +24,7 @@ use Wikibase::Datatype::Struct::Value::String;
 use Wikibase::Datatype::Struct::Value::Time;
 use Wikibase::Datatype::Value;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj);
+Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
 
 our $VERSION = 0.01;
 
@@ -105,6 +105,31 @@ sub json2obj {
 	}
 
 	return $obj;
+}
+
+sub json_type {
+	my $obj = shift;
+
+	my $type = $obj->type;
+	if ($type eq 'globecoordinate') {
+		return Wikibase::Datatype::JSON::Value::Globecoordinate::json_type();
+	} elsif ($type eq 'item') {
+		return Wikibase::Datatype::JSON::Value::Item::json_type();
+	} elsif ($type eq 'monolingualtext') {
+		return Wikibase::Datatype::JSON::Value::Monolingual::json_type();
+	} elsif ($type eq 'property') {
+		return Wikibase::Datatype::JSON::Value::Property::json_type();
+	} elsif ($type eq 'quantity') {
+		return Wikibase::Datatype::JSON::Value::Quantity::json_type();
+	} elsif ($type eq 'string') {
+		return Wikibase::Datatype::JSON::Value::String::json_type();
+	} elsif ($type eq 'time') {
+		return Wikibase::Datatype::JSON::Value::Time::json_type();
+	} else {
+		err "Type '$type' is unsupported.";
+	}
+
+	return;
 }
 
 1;

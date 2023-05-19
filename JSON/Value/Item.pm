@@ -11,7 +11,7 @@ use Readonly;
 use Wikibase::Datatype::Struct::Value::Item;
 use Wikibase::Datatype::Value::Item;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj);
+Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
 
 our $VERSION = 0.01;
 
@@ -47,14 +47,7 @@ sub obj2json {
 			'numeric-id' => $numeric_id,
 		},
 		'type' => 'wikibase-entityid',
-	}, {
-		'value' => {
-			'entity-type' => JSON_TYPE_STRING,
-			'id' => JSON_TYPE_STRING,
-			'numeric-id' => JSON_TYPE_INT,
-		},
-		'type' => JSON_TYPE_STRING,
-	});
+	}, json_type());
 
 	return $json;
 }
@@ -65,6 +58,17 @@ sub json2obj {
 	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
 
 	return Wikibase::Datatype::Struct::Value::Item::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'value' => {
+			'entity-type' => JSON_TYPE_STRING,
+			'id' => JSON_TYPE_STRING,
+			'numeric-id' => JSON_TYPE_INT,
+		},
+		'type' => JSON_TYPE_STRING,
+	};
 }
 
 1;

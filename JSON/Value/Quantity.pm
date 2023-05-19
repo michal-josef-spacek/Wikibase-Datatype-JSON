@@ -12,7 +12,7 @@ use URI;
 use Wikibase::Datatype::Struct::Value::Quantity;
 use Wikibase::Datatype::Value::Quantity;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj);
+Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
 
 our $VERSION = 0.01;
 
@@ -64,15 +64,7 @@ sub obj2json {
 			) : (),
 		},
 		'type' => $obj->type,
-	}, {
-		'value' => {
-			'amount' => JSON_TYPE_STRING,
-			'lowerBound' => JSON_TYPE_STRING,
-			'unit' => JSON_TYPE_STRING,
-			'upperBound' => JSON_TYPE_STRING,
-		},
-		'type' => JSON_TYPE_STRING,
-	});
+	}, json_type());
 
 	return $json;
 }
@@ -83,6 +75,18 @@ sub json2obj {
 	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
 
 	return Wikibase::Datatype::Struct::Value::Quantity::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'value' => {
+			'amount' => JSON_TYPE_STRING,
+			'lowerBound' => JSON_TYPE_STRING,
+			'unit' => JSON_TYPE_STRING,
+			'upperBound' => JSON_TYPE_STRING,
+		},
+		'type' => JSON_TYPE_STRING,
+	};
 }
 
 sub _add_plus {

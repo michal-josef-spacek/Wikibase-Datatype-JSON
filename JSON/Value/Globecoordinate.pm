@@ -12,7 +12,7 @@ use URI;
 use Wikibase::Datatype::Struct::Value::Globecoordinate;
 use Wikibase::Datatype::Value::Globecoordinate;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj);
+Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
 
 our $VERSION = 0.01;
 
@@ -50,16 +50,7 @@ sub obj2json {
 			'precision' => $obj->precision,
 		},
 		'type' => $obj->type,
-	}, {
-		'value' => {
-			'altitude' => JSON_TYPE_FLOAT_OR_NULL,
-			'globe' => JSON_TYPE_STRING,
-			'latitude' => JSON_TYPE_FLOAT,
-			'longitude' => JSON_TYPE_FLOAT,
-			'precision' => JSON_TYPE_FLOAT,
-		},
-		'type' => JSON_TYPE_STRING,
-	});
+	}, json_type());
 
 	return $json;
 }
@@ -70,6 +61,19 @@ sub json2obj {
 	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
 
 	return Wikibase::Datatype::Struct::Value::Globecoordinate::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'value' => {
+			'altitude' => JSON_TYPE_FLOAT_OR_NULL,
+			'globe' => JSON_TYPE_STRING,
+			'latitude' => JSON_TYPE_FLOAT,
+			'longitude' => JSON_TYPE_FLOAT,
+			'precision' => JSON_TYPE_FLOAT,
+		},
+		'type' => JSON_TYPE_STRING,
+	},
 }
 
 1;

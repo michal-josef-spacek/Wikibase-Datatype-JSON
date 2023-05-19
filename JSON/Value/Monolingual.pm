@@ -11,7 +11,7 @@ use Readonly;
 use Wikibase::Datatype::Struct::Value::Monolingual;
 use Wikibase::Datatype::Value::Monolingual;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj);
+Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
 
 our $VERSION = 0.01;
 
@@ -42,13 +42,7 @@ sub obj2json {
 			'text' => $obj->value,
 		},
 		'type' => 'monolingualtext',
-	}, {
-		'value' => {
-			'language' => JSON_TYPE_STRING,
-			'text' => JSON_TYPE_STRING,
-		},
-		'type' => JSON_TYPE_STRING,
-	});
+	}, json_type());
 
 	return $json;
 }
@@ -59,6 +53,16 @@ sub json2obj {
 	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
 
 	return Wikibase::Datatype::Struct::Value::Monolingual::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'value' => {
+			'language' => JSON_TYPE_STRING,
+			'text' => JSON_TYPE_STRING,
+		},
+		'type' => JSON_TYPE_STRING,
+	};
 }
 
 1;

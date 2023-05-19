@@ -12,7 +12,7 @@ use URI;
 use Wikibase::Datatype::Struct::Value::Time;
 use Wikibase::Datatype::Value::Time;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj);
+Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
 
 our $VERSION = 0.01;
 
@@ -54,17 +54,7 @@ sub obj2json {
 			'timezone' => $obj->timezone,
 		},
 		'type' => $obj->type,
-	}, {
-		'value' => {
-			'after' => JSON_TYPE_INT,
-			'before' => JSON_TYPE_INT,
-			'calendarmodel' => JSON_TYPE_STRING,
-			'precision' => JSON_TYPE_INT,
-			'time' => JSON_TYPE_STRING,
-			'timezone' => JSON_TYPE_INT,
-		},
-		'type' => JSON_TYPE_STRING,
-	});
+	}, json_type());
 
 	return $json;
 }
@@ -75,6 +65,20 @@ sub json2obj {
 	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
 
 	return Wikibase::Datatype::Struct::Value::Time::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'value' => {
+			'after' => JSON_TYPE_INT,
+			'before' => JSON_TYPE_INT,
+			'calendarmodel' => JSON_TYPE_STRING,
+			'precision' => JSON_TYPE_INT,
+			'time' => JSON_TYPE_STRING,
+			'timezone' => JSON_TYPE_INT,
+		},
+		'type' => JSON_TYPE_STRING,
+	};
 }
 
 1;
