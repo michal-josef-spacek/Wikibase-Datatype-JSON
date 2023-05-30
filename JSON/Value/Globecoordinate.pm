@@ -135,6 +135,8 @@ Returns Wikibase::Datatype::Value::Globecoordinate instance.
 
 =head1 EXAMPLE1
 
+=for comment filename=value_globecoordinate_obj2json_pretty.pl
+
  use strict;
  use warnings;
 
@@ -168,6 +170,8 @@ Returns Wikibase::Datatype::Value::Globecoordinate instance.
  # }
 
 =head1 EXAMPLE2
+
+=for comment filename=value_globecoordinate_json2obj.pl
 
  use strict;
  use warnings;

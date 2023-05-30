@@ -120,6 +120,8 @@ Returns Wikibase::Datatype::Value::Monolingual instance.
 
 =head1 EXAMPLE1
 
+=for comment filename=value_monolingual_obj2json_pretty.pl
+
  use strict;
  use warnings;
 
@@ -148,6 +150,8 @@ Returns Wikibase::Datatype::Value::Monolingual instance.
  # }
 
 =head1 EXAMPLE2
+
+=for comment filename=value_monolingual_json2obj.pl
 
  use strict;
  use warnings;

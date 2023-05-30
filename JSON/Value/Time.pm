@@ -140,6 +140,8 @@ Returns Wikibase::Datatype::Value::Time instance.
 
 =head1 EXAMPLE1
 
+=for comment filename=value_time_obj2json_pretty.pl
+
  use strict;
  use warnings;
 
@@ -175,6 +177,8 @@ Returns Wikibase::Datatype::Value::Time instance.
  # }
 
 =head1 EXAMPLE2
+
+=for comment filename=value_string_json2obj.pl
 
  use strict;
  use warnings;

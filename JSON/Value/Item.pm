@@ -126,6 +126,8 @@ Returns Wikibase::Datatype::Value::Item instance.
 
 =head1 EXAMPLE1
 
+=for comment filename=value_item_obj2json_pretty.pl
+
  use strict;
  use warnings;
 
@@ -154,6 +156,8 @@ Returns Wikibase::Datatype::Value::Item instance.
  # }
 
 =head1 EXAMPLE2
+
+=for comment filename=value_item_json2obj.pl
 
  use strict;
  use warnings;
