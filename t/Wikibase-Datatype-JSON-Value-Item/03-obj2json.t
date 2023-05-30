@@ -24,7 +24,7 @@ my $right_json = <<'END';
   "type": "wikibase-entityid"
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value::Item->new(
@@ -41,7 +41,7 @@ $right_json = <<'END';
   "type": "wikibase-entityid"
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
 
 # Test.
 eval {

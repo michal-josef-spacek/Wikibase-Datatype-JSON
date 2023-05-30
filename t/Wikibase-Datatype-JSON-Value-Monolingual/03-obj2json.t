@@ -25,7 +25,7 @@ my $right_json = decode_utf8(<<'END');
   "type": "monolingualtext"
 }
 END
-is_json_type(encode_utf8($json), encode_utf8($right_json),
+cmp_json_types(encode_utf8($json), encode_utf8($right_json),
 	'Output of obj2json() subroutine.');
 
 # Test.
@@ -43,7 +43,7 @@ $right_json = decode_utf8(<<'END');
   "type": "monolingualtext"
 }
 END
-is_json_type(encode_utf8($json), encode_utf8($right_json),
+cmp_json_types(encode_utf8($json), encode_utf8($right_json),
 	'Output of obj2json() subroutine (pretty print).');
 
 # Test.

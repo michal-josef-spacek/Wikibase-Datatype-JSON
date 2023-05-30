@@ -24,7 +24,7 @@ my $right_json = <<'END';
   "type": "quantity"
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine.');
 
 # Test.
 $json = Wikibase::Datatype::JSON::Value::Quantity::obj2json(
@@ -43,7 +43,7 @@ $right_json = <<'END';
   "type": "quantity"
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
 
 # Test.
 $obj = Wikibase::Datatype::Value::Quantity->new(
@@ -61,7 +61,7 @@ $right_json = <<'END';
   "type": "quantity"
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value::Quantity->new(
@@ -83,7 +83,7 @@ $right_json = <<'END';
   "type": "quantity"
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine.');
 
 # Test.
 eval {

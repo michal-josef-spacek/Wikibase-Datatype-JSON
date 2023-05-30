@@ -29,7 +29,7 @@ my $right_json = <<'END';
    }
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine.');
 
 # Test.
 $json = Wikibase::Datatype::JSON::Value::Time::obj2json($obj, {
@@ -49,7 +49,7 @@ $json = Wikibase::Datatype::JSON::Value::Time::obj2json($obj, {
    }
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine.');
 
 # Test.
 eval {

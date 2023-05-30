@@ -35,7 +35,7 @@ my $right_json = <<'END';
    "type" : "globecoordinate"
 }
 END
-is_json_type($json, $right_json, 'Globecoordinate: Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Globecoordinate: Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value::Item->new(
@@ -54,7 +54,7 @@ $right_json = <<'END';
   "type": "wikibase-entityid"
 }
 END
-is_json_type($json, $right_json, 'Item: Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Item: Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value::Monolingual->new(
@@ -73,7 +73,7 @@ $right_json = decode_utf8(<<'END');
   "type": "monolingualtext"
 }
 END
-is_json_type($json, $right_json, 'Monolingual: Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Monolingual: Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value::Property->new(
@@ -92,7 +92,7 @@ $right_json = <<'END';
   "type": "wikibase-entityid"
 }
 END
-is_json_type($json, $right_json, 'Property: Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Property: Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value::Quantity->new(
@@ -111,7 +111,7 @@ $right_json = <<'END';
   "type": "quantity"
 }
 END
-is_json_type($json, $right_json, 'Quantity: Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Quantity: Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value::String->new(
@@ -126,7 +126,7 @@ $right_json = <<'END';
   "type": "string"
 }
 END
-is_json_type($json, $right_json, 'String: Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'String: Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value::Time->new(
@@ -148,7 +148,7 @@ $right_json = <<'END';
    }
 }
 END
-is_json_type($json, $right_json, 'Time: Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Time: Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value->new(

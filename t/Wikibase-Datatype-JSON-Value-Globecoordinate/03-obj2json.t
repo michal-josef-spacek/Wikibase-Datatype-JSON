@@ -28,7 +28,7 @@ my $right_json = <<'END';
    "type" : "globecoordinate"
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine.');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine.');
 
 # Test.
 $obj = Wikibase::Datatype::Value::Globecoordinate->new(
@@ -50,7 +50,7 @@ $right_json = <<'END';
    "type" : "globecoordinate"
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine (pretty print).');
 
 # Test.
 eval {
@@ -81,7 +81,7 @@ $right_json = <<'END';
    "type" : "globecoordinate"
 }
 END
-is_json_type($json, $right_json, 'Output of obj2json() subroutine (with altitude).');
+cmp_json_types($json, $right_json, 'Output of obj2json() subroutine (with altitude).');
 
 # Test.
 eval {
