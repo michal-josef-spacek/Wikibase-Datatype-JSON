@@ -24,53 +24,9 @@ use Wikibase::Datatype::Struct::Value::String;
 use Wikibase::Datatype::Struct::Value::Time;
 use Wikibase::Datatype::Value;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
+Readonly::Array our @EXPORT_OK => qw(json2obj json_type obj2json);
 
 our $VERSION = 0.01;
-
-sub obj2json {
-	my ($obj, $opts_hr) = @_;
-
-	if (! defined $opts_hr) {
-		$opts_hr = {};
-	}
-	if (! exists $opts_hr->{'pretty'}) {
-		$opts_hr->{'pretty'} = 0;
-	}
-
-	if (! defined $obj) {
-		err "Object doesn't exist.";
-	}
-	if (! $obj->isa('Wikibase::Datatype::Value')) {
-		err "Object isn't 'Wikibase::Datatype::Value'.";
-	}
-
-	if (! exists $opts_hr->{'base_uri'} || ! defined $opts_hr->{'base_uri'}) {
-		err "Parameter 'base_uri' is required.";
-	}
-
-	my $json;
-	my $type = $obj->type;
-	if ($type eq 'globecoordinate') {
-		$json = Wikibase::Datatype::JSON::Value::Globecoordinate::obj2json($obj, $opts_hr);
-	} elsif ($type eq 'item') {
-		$json = Wikibase::Datatype::JSON::Value::Item::obj2json($obj, $opts_hr);
-	} elsif ($type eq 'monolingualtext') {
-		$json = Wikibase::Datatype::JSON::Value::Monolingual::obj2json($obj, $opts_hr);
-	} elsif ($type eq 'property') {
-		$json = Wikibase::Datatype::JSON::Value::Property::obj2json($obj, $opts_hr);
-	} elsif ($type eq 'quantity') {
-		$json = Wikibase::Datatype::JSON::Value::Quantity::obj2json($obj, $opts_hr);
-	} elsif ($type eq 'string') {
-		$json = Wikibase::Datatype::JSON::Value::String::obj2json($obj, $opts_hr);
-	} elsif ($type eq 'time') {
-		$json = Wikibase::Datatype::JSON::Value::Time::obj2json($obj, $opts_hr);
-	} else {
-		err "Type '$type' is unsupported.";
-	}
-
-	return $json;
-}
 
 sub json2obj {
 	my $json = shift;
@@ -132,6 +88,50 @@ sub json_type {
 	return;
 }
 
+sub obj2json {
+	my ($obj, $opts_hr) = @_;
+
+	if (! defined $opts_hr) {
+		$opts_hr = {};
+	}
+	if (! exists $opts_hr->{'pretty'}) {
+		$opts_hr->{'pretty'} = 0;
+	}
+
+	if (! defined $obj) {
+		err "Object doesn't exist.";
+	}
+	if (! $obj->isa('Wikibase::Datatype::Value')) {
+		err "Object isn't 'Wikibase::Datatype::Value'.";
+	}
+
+	if (! exists $opts_hr->{'base_uri'} || ! defined $opts_hr->{'base_uri'}) {
+		err "Parameter 'base_uri' is required.";
+	}
+
+	my $json;
+	my $type = $obj->type;
+	if ($type eq 'globecoordinate') {
+		$json = Wikibase::Datatype::JSON::Value::Globecoordinate::obj2json($obj, $opts_hr);
+	} elsif ($type eq 'item') {
+		$json = Wikibase::Datatype::JSON::Value::Item::obj2json($obj, $opts_hr);
+	} elsif ($type eq 'monolingualtext') {
+		$json = Wikibase::Datatype::JSON::Value::Monolingual::obj2json($obj, $opts_hr);
+	} elsif ($type eq 'property') {
+		$json = Wikibase::Datatype::JSON::Value::Property::obj2json($obj, $opts_hr);
+	} elsif ($type eq 'quantity') {
+		$json = Wikibase::Datatype::JSON::Value::Quantity::obj2json($obj, $opts_hr);
+	} elsif ($type eq 'string') {
+		$json = Wikibase::Datatype::JSON::Value::String::obj2json($obj, $opts_hr);
+	} elsif ($type eq 'time') {
+		$json = Wikibase::Datatype::JSON::Value::Time::obj2json($obj, $opts_hr);
+	} else {
+		err "Type '$type' is unsupported.";
+	}
+
+	return $json;
+}
+
 1;
 
 __END__
@@ -146,10 +146,11 @@ Wikibase::Datatype::JSON::Value - Wikibase value JSON structure serialization.
 
 =head1 SYNOPSIS
 
- use Wikibase::Datatype::JSON::Value qw(obj2json json2obj);
+ use Wikibase::Datatype::JSON::Value qw(json2obj json_type obj2json);
 
- my $json = obj2json($obj, $opts_hr);
  my $obj = json2obj($json);
+ my $json_type_hr = json_type($obj);
+ my $json = obj2json($obj, $opts_hr);
 
 =head1 DESCRIPTION
 
@@ -157,6 +158,22 @@ This conversion is between objects defined in Wikibase::Datatype and structures
 serialized via JSON to MediaWiki.
 
 =head1 SUBROUTINES
+
+=head2 C<json2obj>
+
+ my $obj = json2obj($json);
+
+Convert JSON structure of value to object.
+
+Returns Wikibase::Datatype::Value instance.
+
+=head2 C<json_type>
+
+ my $json_type_hr = json_type($obj);
+
+Get JSON type defined in L<Cpanel::JSON::XS::Type>.
+
+Returns reference to hash.
 
 =head2 C<obj2json>
 
@@ -170,15 +187,12 @@ C<$opts_hr> is reference to hash with parameters:
 
 Returns JSON string.
 
-=head2 C<json2obj>
-
- my $obj = json2obj($json);
-
-Convert JSON structure of value to object.
-
-Returns Wikibase::Datatype::Value instance.
-
 =head1 ERRORS
+
+ json2obj():
+         Entity type '%s' is unsupported.
+         Type doesn't exist.
+         Type '%s' is unsupported.
 
  obj2json():
          Object doesn't exist.
@@ -186,51 +200,7 @@ Returns Wikibase::Datatype::Value instance.
          Type '%s' is unsupported.
          Parameter 'base_uri' is required.
 
- json2obj():
-         Entity type '%s' is unsupported.
-         Type doesn't exist.
-         Type '%s' is unsupported.
-
 =head1 EXAMPLE1
-
-=for comment filename=value_obj2json_pretty.pl
-
- use strict;
- use warnings;
-
- use Data::Printer;
- use Wikibase::Datatype::Value::Time;
- use Wikibase::Datatype::JSON::Value qw(obj2json);
-
- # Object.
- my $obj = Wikibase::Datatype::Value::Time->new(
-         'precision' => 10,
-         'value' => '+2020-09-01T00:00:00Z',
- );
-
- # Get JSON.
- my $json = obj2json($obj, {
-         'base_uri' => 'http://test.wikidata.org/entity/',
-         'pretty' => 1,
- });
-
- # Print to output.
- print $json;
-
- # Output like:
- # {
- #    "type" : "time",
- #    "value" : {
- #       "after" : 0,
- #       "before" : 0,
- #       "calendarmodel" : "http://test.wikidata.org/entity/Q1985727",
- #       "precision" : 10,
- #       "time" : "+2020-09-01T00:00:00Z",
- #       "timezone" : 0
- #    }
- # }
-
-=head1 EXAMPLE2
 
 =for comment filename=value_json2obj.pl
 
@@ -280,6 +250,45 @@ Returns Wikibase::Datatype::Value instance.
  # Precision: 10
  # Type: time
  # Value: +2020-09-01T00:00:00Z
+
+=head1 EXAMPLE2
+
+=for comment filename=value_obj2json_pretty.pl
+
+ use strict;
+ use warnings;
+
+ use Data::Printer;
+ use Wikibase::Datatype::Value::Time;
+ use Wikibase::Datatype::JSON::Value qw(obj2json);
+
+ # Object.
+ my $obj = Wikibase::Datatype::Value::Time->new(
+         'precision' => 10,
+         'value' => '+2020-09-01T00:00:00Z',
+ );
+
+ # Get JSON.
+ my $json = obj2json($obj, {
+         'base_uri' => 'http://test.wikidata.org/entity/',
+         'pretty' => 1,
+ });
+
+ # Print to output.
+ print $json;
+
+ # Output like:
+ # {
+ #    "type" : "time",
+ #    "value" : {
+ #       "after" : 0,
+ #       "before" : 0,
+ #       "calendarmodel" : "http://test.wikidata.org/entity/Q1985727",
+ #       "precision" : 10,
+ #       "time" : "+2020-09-01T00:00:00Z",
+ #       "timezone" : 0
+ #    }
+ # }
 
 =head1 DEPENDENCIES
 
