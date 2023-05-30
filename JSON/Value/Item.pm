@@ -11,9 +11,28 @@ use Readonly;
 use Wikibase::Datatype::Struct::Value::Item;
 use Wikibase::Datatype::Value::Item;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
+Readonly::Array our @EXPORT_OK => qw(json2obj json_type obj2json);
 
 our $VERSION = 0.01;
+
+sub json2obj {
+	my $json = shift;
+
+	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
+
+	return Wikibase::Datatype::Struct::Value::Item::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'value' => {
+			'entity-type' => JSON_TYPE_STRING,
+			'id' => JSON_TYPE_STRING,
+			'numeric-id' => JSON_TYPE_INT,
+		},
+		'type' => JSON_TYPE_STRING,
+	};
+}
 
 sub obj2json {
 	my ($obj, $opts_hr) = @_;
@@ -52,25 +71,6 @@ sub obj2json {
 	return $json;
 }
 
-sub json2obj {
-	my $json = shift;
-
-	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
-
-	return Wikibase::Datatype::Struct::Value::Item::struct2obj($struct_hr);
-}
-
-sub json_type {
-	return {
-		'value' => {
-			'entity-type' => JSON_TYPE_STRING,
-			'id' => JSON_TYPE_STRING,
-			'numeric-id' => JSON_TYPE_INT,
-		},
-		'type' => JSON_TYPE_STRING,
-	};
-}
-
 1;
 
 __END__
@@ -85,10 +85,11 @@ Wikibase::Datatype::JSON::Value::Item - Wikibase item JSON structure serializati
 
 =head1 SYNOPSIS
 
- use Wikibase::Datatype::Struct::Value::Item qw(obj2json json2obj);
+ use Wikibase::Datatype::Struct::Value::Item qw(json2obj json_type obj2json);
 
- my $json = obj2json($obj, $opts_hr);
  my $obj = json2obj($json);
+ my $json_type_hr = json_type($obj);
+ my $json = obj2json($obj, $opts_hr);
 
 =head1 DESCRIPTION
 
@@ -96,6 +97,22 @@ This conversion is between objects defined in Wikibase::Datatype and structures
 serialized via JSON to MediaWiki.
 
 =head1 SUBROUTINES
+
+=head2 C<json2obj>
+
+ my $obj = json2obj($json);
+
+Convert structure of item JSON string to object.
+
+Returns Wikibase::Datatype::Value::Item instance.
+
+=head2 C<json_type>
+
+ my $json_type_hr = json_type($obj);
+
+Get JSON type defined in L<Cpanel::JSON::XS::Type>.
+
+Returns reference to hash.
 
 =head2 C<obj2json>
 
@@ -106,56 +123,17 @@ C<$opts_hr> are optional settings. There is 'pretty' flag for pretty print (0/1)
 
 Returns JSON string.
 
-=head2 C<json2obj>
-
- my $obj = json2obj($json);
-
-Convert structure of item JSON string to object.
-
-Returns Wikibase::Datatype::Value::Item instance.
-
 =head1 ERRORS
-
- obj2json():
-         Object doesn't exist.
-         Object isn't 'Wikibase::Datatype::Value::Item'.
 
  json2obj():
          From Wikibase::Datatype::Struct::Value::Item::struct2obj():
                  Structure isn't for 'item' datatype.
 
+ obj2json():
+         Object doesn't exist.
+         Object isn't 'Wikibase::Datatype::Value::Item'.
+
 =head1 EXAMPLE1
-
-=for comment filename=value_item_obj2json_pretty.pl
-
- use strict;
- use warnings;
-
- use Wikibase::Datatype::Value::Item;
- use Wikibase::Datatype::JSON::Value::Item qw(obj2json);
-
- # Object.
- my $obj = Wikibase::Datatype::Value::Item->new(
-         'value' => 'Q123',
- );
-
- # Get JSON string.
- my $json = obj2json($obj, {'pretty' => 1});
-
- # Print out.
- print $json;
-
- # Output:
- # {
- #    "type" : "wikibase-entityid",
- #    "value" : {
- #       "entity-type" : "item",
- #       "numeric-id" : 123,
- #       "id" : "Q123"
- #    }
- # }
-
-=head1 EXAMPLE2
 
 =for comment filename=value_item_json2obj.pl
 
@@ -192,6 +170,37 @@ Returns Wikibase::Datatype::Value::Item instance.
  # Output:
  # Type: item
  # Value: Q123
+
+=head1 EXAMPLE2
+
+=for comment filename=value_item_obj2json_pretty.pl
+
+ use strict;
+ use warnings;
+
+ use Wikibase::Datatype::Value::Item;
+ use Wikibase::Datatype::JSON::Value::Item qw(obj2json);
+
+ # Object.
+ my $obj = Wikibase::Datatype::Value::Item->new(
+         'value' => 'Q123',
+ );
+
+ # Get JSON string.
+ my $json = obj2json($obj, {'pretty' => 1});
+
+ # Print out.
+ print $json;
+
+ # Output:
+ # {
+ #    "type" : "wikibase-entityid",
+ #    "value" : {
+ #       "entity-type" : "item",
+ #       "numeric-id" : 123,
+ #       "id" : "Q123"
+ #    }
+ # }
 
 =head1 DEPENDENCIES
 

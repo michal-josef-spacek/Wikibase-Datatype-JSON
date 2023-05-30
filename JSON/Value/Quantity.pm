@@ -12,9 +12,29 @@ use URI;
 use Wikibase::Datatype::Struct::Value::Quantity;
 use Wikibase::Datatype::Value::Quantity;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
+Readonly::Array our @EXPORT_OK => qw(json2obj json_type obj2json);
 
 our $VERSION = 0.01;
+
+sub json2obj {
+	my $json = shift;
+
+	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
+
+	return Wikibase::Datatype::Struct::Value::Quantity::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'value' => {
+			'amount' => JSON_TYPE_STRING,
+			'lowerBound' => JSON_TYPE_STRING,
+			'unit' => JSON_TYPE_STRING,
+			'upperBound' => JSON_TYPE_STRING,
+		},
+		'type' => JSON_TYPE_STRING,
+	};
+}
 
 sub obj2json {
 	my ($obj, $opts_hr) = @_;
@@ -69,26 +89,6 @@ sub obj2json {
 	return $json;
 }
 
-sub json2obj {
-	my $json = shift;
-
-	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
-
-	return Wikibase::Datatype::Struct::Value::Quantity::struct2obj($struct_hr);
-}
-
-sub json_type {
-	return {
-		'value' => {
-			'amount' => JSON_TYPE_STRING,
-			'lowerBound' => JSON_TYPE_STRING,
-			'unit' => JSON_TYPE_STRING,
-			'upperBound' => JSON_TYPE_STRING,
-		},
-		'type' => JSON_TYPE_STRING,
-	};
-}
-
 sub _add_plus {
 	my $value = shift;
 
@@ -123,10 +123,11 @@ Wikibase::Datatype::JSON::Value::Quantity - Wikibase quantity JSON structure ser
 
 =head1 SYNOPSIS
 
- use Wikibase::Datatype::JSON::Value::Quantity qw(obj2json json2obj);
+ use Wikibase::Datatype::JSON::Value::Quantity qw(json2obj json_type obj2json);
 
- my $json = obj2json($obj, $opts_hr);
  my $obj = json2obj($json);
+ my $json_type_hr = json_type($obj);
+ my $json = obj2json($obj, $opts_hr);
 
 =head1 DESCRIPTION
 
@@ -134,6 +135,22 @@ This conversion is between objects defined in Wikibase::Datatype and structures
 serialized via JSON to MediaWiki.
 
 =head1 SUBROUTINES
+
+=head2 C<json2obj>
+
+ my $obj = json2obj($json);
+
+Convert JSON structure of quantity to object.
+
+Returns Wikibase::Datatype::Value::Quantity instance.
+
+=head2 C<json_type>
+
+ my $json_type_hr = json_type($obj);
+
+Get JSON type defined in L<Cpanel::JSON::XS::Type>.
+
+Returns reference to hash.
 
 =head2 C<obj2json>
 
@@ -147,60 +164,18 @@ C<$opts_hr> is reference to hash with parameters:
 
 Returns JSON string.
 
-=head2 C<json2obj>
-
- my $obj = json2obj($json);
-
-Convert JSON structure of quantity to object.
-
-Returns Wikibase::Datatype::Value::Quantity instance.
-
 =head1 ERRORS
+
+ json2obj():
+         From Wikibase::Datatype::Struct::Value::Quantity::struct2obj():
+                 Structure isn't for 'quantity' datatype.
 
  obj2json():
          Object doesn't exist.
          Object isn't 'Wikibase::Datatype::Value::Quantity'.
          Parameter 'base_uri' is required.
 
- json2obj():
-         From Wikibase::Datatype::Struct::Value::Quantity::struct2obj():
-                 Structure isn't for 'quantity' datatype.
-
 =head1 EXAMPLE1
-
-=for comment filename=value_quantity_obj2json_pretty.pl
-
- use strict;
- use warnings;
-
- use Wikibase::Datatype::Value::Quantity;
- use Wikibase::Datatype::JSON::Value::Quantity qw(obj2json);
-
- # Object.
- my $obj = Wikibase::Datatype::Value::Quantity->new(
-         'unit' => 'Q190900',
-         'value' => 10,
- );
-
- # Get JSON.
- my $json = obj2json($obj, {
-         'base_uri' => 'http://test.wikidata.org/entity/',
-         'pretty' => 1,
- });
-
- # Print to output.
- print $json;
-
- # Output:
- # {
- #    "value" : {
- #       "amount" : "+10",
- #       "unit" : "http://test.wikidata.org/entity/Q190900"
- #    },
- #    "type" : "quantity"
- # }
-
-=head1 EXAMPLE2
 
 =for comment filename=value_quantity_json2obj.pl
 
@@ -243,6 +218,40 @@ Returns Wikibase::Datatype::Value::Quantity instance.
  # Type: quantity
  # Unit: Q190900
  # Value: 10
+
+=head1 EXAMPLE2
+
+=for comment filename=value_quantity_obj2json_pretty.pl
+
+ use strict;
+ use warnings;
+
+ use Wikibase::Datatype::Value::Quantity;
+ use Wikibase::Datatype::JSON::Value::Quantity qw(obj2json);
+
+ # Object.
+ my $obj = Wikibase::Datatype::Value::Quantity->new(
+         'unit' => 'Q190900',
+         'value' => 10,
+ );
+
+ # Get JSON.
+ my $json = obj2json($obj, {
+         'base_uri' => 'http://test.wikidata.org/entity/',
+         'pretty' => 1,
+ });
+
+ # Print to output.
+ print $json;
+
+ # Output:
+ # {
+ #    "value" : {
+ #       "amount" : "+10",
+ #       "unit" : "http://test.wikidata.org/entity/Q190900"
+ #    },
+ #    "type" : "quantity"
+ # }
 
 =head1 DEPENDENCIES
 

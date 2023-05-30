@@ -11,9 +11,24 @@ use Readonly;
 use Wikibase::Datatype::Struct::Value::String;
 use Wikibase::Datatype::Value::String;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
+Readonly::Array our @EXPORT_OK => qw(json2obj json_type obj2json);
 
 our $VERSION = 0.01;
+
+sub json2obj {
+	my $json = shift;
+
+	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
+
+	return Wikibase::Datatype::Struct::Value::String::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'type' => JSON_TYPE_STRING,
+		'value' => JSON_TYPE_STRING,
+	};
+}
 
 sub obj2json {
 	my ($obj, $opts_hr) = @_;
@@ -45,21 +60,6 @@ sub obj2json {
 	return $json;
 }
 
-sub json2obj {
-	my $json = shift;
-
-	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
-
-	return Wikibase::Datatype::Struct::Value::String::struct2obj($struct_hr);
-}
-
-sub json_type {
-	return {
-		'type' => JSON_TYPE_STRING,
-		'value' => JSON_TYPE_STRING,
-	};
-}
-
 1;
 
 __END__
@@ -74,10 +74,11 @@ Wikibase::Datatype::JSON::Value::String - Wikibase string JSON structure seriali
 
 =head1 SYNOPSIS
 
- use Wikibase::Datatype::JSON::Value::String qw(obj2json json2obj);
+ use Wikibase::Datatype::JSON::Value::String qw(json2obj json_type obj2json);
 
- my $json = obj2json($obj, $opts_hr);
  my $obj = json2obj($json);
+ my $json_type_hr = json_type($obj);
+ my $json = obj2json($obj, $opts_hr);
 
 =head1 DESCRIPTION
 
@@ -85,6 +86,22 @@ This conversion is between objects defined in Wikibase::Datatype and structures
 serialized via JSON to MediaWiki.
 
 =head1 SUBROUTINES
+
+=head2 C<json2obj>
+
+ my $obj = json2obj($json);
+
+Convert structure of JSON string to object.
+
+Returns Wikibase::Datatype::Value::String instance.
+
+=head2 C<json_type>
+
+ my $json_type_hr = json_type($obj);
+
+Get JSON type defined in L<Cpanel::JSON::XS::Type>.
+
+Returns reference to hash.
 
 =head2 C<obj2json>
 
@@ -95,52 +112,17 @@ C<$opts_hr> are optional settings. There is 'pretty' flag for pretty print (0/1)
 
 Returns JSON string.
 
-=head2 C<json2obj>
-
- my $obj = json2obj($json);
-
-Convert structure of JSON string to object.
-
-Returns Wikibase::Datatype::Value::String instance.
-
 =head1 ERRORS
-
- obj2json():
-         Object doesn't exist.
-         Object isn't 'Wikibase::Datatype::Value::String'.
 
  json2obj():
          From Wikibase::Datatype::Struct::Value::String::struct2obj():
                  Structure isn't for 'string' datatype.
 
+ obj2json():
+         Object doesn't exist.
+         Object isn't 'Wikibase::Datatype::Value::String'.
+
 =head1 EXAMPLE1
-
-=for comment filename=value_string_obj2json_pretty.pl
-
- use strict;
- use warnings;
-
- use Wikibase::Datatype::Value::String;
- use Wikibase::Datatype::JSON::Value::String qw(obj2json);
-
- # Object.
- my $obj = Wikibase::Datatype::Value::String->new(
-         'value' => 'foo',
- );
-
- # Get JSON string.
- my $json = obj2json($obj, {'pretty' => 1});
-
- # Print out.
- print $json;
-
- # Output:
- # {
- #    "value" : "foo",
- #    "type" : "string"
- # }
-
-=head1 EXAMPLE2
 
 =for comment filename=value_string_json2obj.pl
 
@@ -173,6 +155,33 @@ Returns Wikibase::Datatype::Value::String instance.
  # Output:
  # Type: string
  # Value: foo
+
+=head1 EXAMPLE2
+
+=for comment filename=value_string_obj2json_pretty.pl
+
+ use strict;
+ use warnings;
+
+ use Wikibase::Datatype::Value::String;
+ use Wikibase::Datatype::JSON::Value::String qw(obj2json);
+
+ # Object.
+ my $obj = Wikibase::Datatype::Value::String->new(
+         'value' => 'foo',
+ );
+
+ # Get JSON string.
+ my $json = obj2json($obj, {'pretty' => 1});
+
+ # Print out.
+ print $json;
+
+ # Output:
+ # {
+ #    "value" : "foo",
+ #    "type" : "string"
+ # }
 
 =head1 DEPENDENCIES
 

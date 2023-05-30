@@ -11,9 +11,28 @@ use Readonly;
 use Wikibase::Datatype::Struct::Value::Property;
 use Wikibase::Datatype::Value::Property;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
+Readonly::Array our @EXPORT_OK => qw(json2obj json_type obj2json);
 
 our $VERSION = 0.01;
+
+sub json2obj {
+	my $json = shift;
+
+	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
+
+	return Wikibase::Datatype::Struct::Value::Property::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'value' => {
+			'entity-type' => JSON_TYPE_STRING,
+			'id' => JSON_TYPE_STRING,
+			'numeric-id' => JSON_TYPE_INT,
+		},
+		'type' => JSON_TYPE_STRING,
+	};
+}
 
 sub obj2json {
 	my ($obj, $opts_hr) = @_;
@@ -51,25 +70,6 @@ sub obj2json {
 	return $json;
 }
 
-sub json2obj {
-	my $json = shift;
-
-	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
-
-	return Wikibase::Datatype::Struct::Value::Property::struct2obj($struct_hr);
-}
-
-sub json_type {
-	return {
-		'value' => {
-			'entity-type' => JSON_TYPE_STRING,
-			'id' => JSON_TYPE_STRING,
-			'numeric-id' => JSON_TYPE_INT,
-		},
-		'type' => JSON_TYPE_STRING,
-	};
-}
-
 1;
 
 __END__
@@ -84,10 +84,11 @@ Wikibase::Datatype::JSON::Value::Property - Wikibase property JSON structure ser
 
 =head1 SYNOPSIS
 
- use Wikibase::Datatype::JSON::Value::Property qw(obj2json json2obj);
+ use Wikibase::Datatype::JSON::Value::Property qw(json2obj json_type obj2json);
 
- my $struct_hr = obj2json($obj);
  my $obj = json2obj($struct_hr);
+ my $json_type_hr = json_type($obj);
+ my $struct_hr = obj2json($obj);
 
 =head1 DESCRIPTION
 
@@ -95,14 +96,6 @@ This conversion is between objects defined in Wikibase::Datatype and structures
 serialized via JSON to MediaWiki.
 
 =head1 SUBROUTINES
-
-=head2 C<obj2json>
-
- my $struct_hr = obj2json($obj);
-
-Convert Wikibase::Datatype::Value::Property instance to structure.
-
-Returns reference to hash with structure.
 
 =head2 C<json2obj>
 
@@ -112,48 +105,33 @@ Convert structure of property to object.
 
 Returns Wikibase::Datatype::Value::Property instance.
 
-=head1 ERRORS
+=head2 C<json_type>
 
- obj2json():
-         Object doesn't exist.
-         Object isn't 'Wikibase::Datatype::Value::Property'.
+ my $json_type_hr = json_type($obj);
+
+Get JSON type defined in L<Cpanel::JSON::XS::Type>.
+
+Returns reference to hash.
+
+=head2 C<obj2json>
+
+ my $struct_hr = obj2json($obj);
+
+Convert Wikibase::Datatype::Value::Property instance to structure.
+
+Returns reference to hash with structure.
+
+=head1 ERRORS
 
  json2obj():
          From Wikibase::Datatype::Struct::Value::Property::struct2obj():
                  Structure isn't for 'property' datatype.
 
+ obj2json():
+         Object doesn't exist.
+         Object isn't 'Wikibase::Datatype::Value::Property'.
+
 =head1 EXAMPLE1
-
-=for comment filename=value_property_obj2json_pretty.pl
-
- use strict;
- use warnings;
-
- use Wikibase::Datatype::JSON::Value::Property qw(obj2json);
- use Wikibase::Datatype::Value::Property;
-
- # Object.
- my $obj = Wikibase::Datatype::Value::Property->new(
-         'value' => 'P123',
- );
-
- # Get JSON.
- my $json = obj2json($obj, {'pretty' => 1});
-
- # Print to output.
- print $json;
-
- # Output:
- # {
- #    "type" : "wikibase-entityid",
- #    "value" : {
- #       "numeric-id" : 123,
- #       "entity-type" : "property",
- #       "id" : "P123"
- #    }
- # }
-
-=head1 EXAMPLE2
 
 =for comment filename=value_property_json2obj.pl
 
@@ -190,6 +168,37 @@ Returns Wikibase::Datatype::Value::Property instance.
  # Output:
  # Type: property
  # Value: P123
+
+=head1 EXAMPLE2
+
+=for comment filename=value_property_obj2json_pretty.pl
+
+ use strict;
+ use warnings;
+
+ use Wikibase::Datatype::JSON::Value::Property qw(obj2json);
+ use Wikibase::Datatype::Value::Property;
+
+ # Object.
+ my $obj = Wikibase::Datatype::Value::Property->new(
+         'value' => 'P123',
+ );
+
+ # Get JSON.
+ my $json = obj2json($obj, {'pretty' => 1});
+
+ # Print to output.
+ print $json;
+
+ # Output:
+ # {
+ #    "type" : "wikibase-entityid",
+ #    "value" : {
+ #       "numeric-id" : 123,
+ #       "entity-type" : "property",
+ #       "id" : "P123"
+ #    }
+ # }
 
 =head1 DEPENDENCIES
 

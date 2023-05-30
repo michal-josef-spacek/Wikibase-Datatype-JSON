@@ -12,9 +12,31 @@ use URI;
 use Wikibase::Datatype::Struct::Value::Time;
 use Wikibase::Datatype::Value::Time;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
+Readonly::Array our @EXPORT_OK => qw(json2obj json_type obj2json);
 
 our $VERSION = 0.01;
+
+sub json2obj {
+	my $json = shift;
+
+	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
+
+	return Wikibase::Datatype::Struct::Value::Time::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'value' => {
+			'after' => JSON_TYPE_INT,
+			'before' => JSON_TYPE_INT,
+			'calendarmodel' => JSON_TYPE_STRING,
+			'precision' => JSON_TYPE_INT,
+			'time' => JSON_TYPE_STRING,
+			'timezone' => JSON_TYPE_INT,
+		},
+		'type' => JSON_TYPE_STRING,
+	};
+}
 
 sub obj2json {
 	my ($obj, $opts_hr) = @_;
@@ -59,28 +81,6 @@ sub obj2json {
 	return $json;
 }
 
-sub json2obj {
-	my $json = shift;
-
-	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
-
-	return Wikibase::Datatype::Struct::Value::Time::struct2obj($struct_hr);
-}
-
-sub json_type {
-	return {
-		'value' => {
-			'after' => JSON_TYPE_INT,
-			'before' => JSON_TYPE_INT,
-			'calendarmodel' => JSON_TYPE_STRING,
-			'precision' => JSON_TYPE_INT,
-			'time' => JSON_TYPE_STRING,
-			'timezone' => JSON_TYPE_INT,
-		},
-		'type' => JSON_TYPE_STRING,
-	};
-}
-
 1;
 
 __END__
@@ -95,10 +95,11 @@ Wikibase::Datatype::JSON::Value::Time - Wikibase time JSON structure serializati
 
 =head1 SYNOPSIS
 
- use Wikibase::Datatype::JSON::Value::Time qw(obj2json json2obj);
+ use Wikibase::Datatype::JSON::Value::Time qw(json2obj json_type obj2json);
 
- my $json = obj2json($obj, $opts_hr);
  my $obj = json2obj($json);
+ my $json_type_hr = json_type($obj);
+ my $json = obj2json($obj, $opts_hr);
 
 =head1 DESCRIPTION
 
@@ -106,6 +107,22 @@ This conversion is between objects defined in Wikibase::Datatype and structures
 serialized via JSON to MediaWiki.
 
 =head1 SUBROUTINES
+
+=head2 C<json2obj>
+
+ my $obj = json2obj($json);
+
+Convert JSON structure of time to object.
+
+Returns Wikibase::Datatype::Value::Time instance.
+
+=head2 C<json_type>
+
+ my $json_type_hr = json_type($obj);
+
+Get JSON type defined in L<Cpanel::JSON::XS::Type>.
+
+Returns reference to hash.
 
 =head2 C<obj2json>
 
@@ -119,64 +136,18 @@ C<$opts_hr> is reference to hash with parameters:
 
 Returns JSON string.
 
-=head2 C<json2obj>
-
- my $obj = json2obj($json);
-
-Convert JSON structure of time to object.
-
-Returns Wikibase::Datatype::Value::Time instance.
-
 =head1 ERRORS
+
+ json2obj():
+         From Wikibase::Datatype::Struct::Value::Time::struct2obj():
+                 Structure isn't for 'time' datatype.
 
  obj2json():
          Object doesn't exist.
          Object isn't 'Wikibase::Datatype::Value::Time'.
          Parameter 'base_uri' is required.
 
- json2obj():
-         From Wikibase::Datatype::Struct::Value::Time::struct2obj():
-                 Structure isn't for 'time' datatype.
-
 =head1 EXAMPLE1
-
-=for comment filename=value_time_obj2json_pretty.pl
-
- use strict;
- use warnings;
-
- use Wikibase::Datatype::Value::Time;
- use Wikibase::Datatype::JSON::Value::Time qw(obj2json);
-
- # Object.
- my $obj = Wikibase::Datatype::Value::Time->new(
-         'precision' => 10,
-         'value' => '+2020-09-01T00:00:00Z',
- );
-
- # Get JSON.
- my $json = obj2json($obj, {
-         'base_uri' => 'http://test.wikidata.org/entity/',
-         'pretty' => 1,
- });
-
- # Print to output.
- print $json;
-
- # Output:
- # {
- #    "type" : "time",
- #    "value" : {
- #       "timezone" : 0,
- #       "before" : 0,
- #       "precision" : 10,
- #       "calendarmodel" : "http://test.wikidata.org/entity/Q1985727",
- #       "time" : "+2020-09-01T00:00:00Z",
- #       "after" : 0
- #    }
- # }
-
-=head1 EXAMPLE2
 
 =for comment filename=value_string_json2obj.pl
 
@@ -226,6 +197,44 @@ Returns Wikibase::Datatype::Value::Time instance.
  # Precision: 10
  # Type: time
  # Value: +2020-09-01T00:00:00Z
+
+=head1 EXAMPLE2
+
+=for comment filename=value_time_obj2json_pretty.pl
+
+ use strict;
+ use warnings;
+
+ use Wikibase::Datatype::Value::Time;
+ use Wikibase::Datatype::JSON::Value::Time qw(obj2json);
+
+ # Object.
+ my $obj = Wikibase::Datatype::Value::Time->new(
+         'precision' => 10,
+         'value' => '+2020-09-01T00:00:00Z',
+ );
+
+ # Get JSON.
+ my $json = obj2json($obj, {
+         'base_uri' => 'http://test.wikidata.org/entity/',
+         'pretty' => 1,
+ });
+
+ # Print to output.
+ print $json;
+
+ # Output:
+ # {
+ #    "type" : "time",
+ #    "value" : {
+ #       "timezone" : 0,
+ #       "before" : 0,
+ #       "precision" : 10,
+ #       "calendarmodel" : "http://test.wikidata.org/entity/Q1985727",
+ #       "time" : "+2020-09-01T00:00:00Z",
+ #       "after" : 0
+ #    }
+ # }
 
 =head1 DEPENDENCIES
 

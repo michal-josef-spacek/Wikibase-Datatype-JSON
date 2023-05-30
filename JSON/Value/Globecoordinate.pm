@@ -12,9 +12,30 @@ use URI;
 use Wikibase::Datatype::Struct::Value::Globecoordinate;
 use Wikibase::Datatype::Value::Globecoordinate;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
+Readonly::Array our @EXPORT_OK => qw(json2obj json_type obj2json);
 
 our $VERSION = 0.01;
+
+sub json2obj {
+	my $json = shift;
+
+	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
+
+	return Wikibase::Datatype::Struct::Value::Globecoordinate::struct2obj($struct_hr);
+}
+
+sub json_type {
+	return {
+		'value' => {
+			'altitude' => JSON_TYPE_FLOAT_OR_NULL,
+			'globe' => JSON_TYPE_STRING,
+			'latitude' => JSON_TYPE_FLOAT,
+			'longitude' => JSON_TYPE_FLOAT,
+			'precision' => JSON_TYPE_FLOAT,
+		},
+		'type' => JSON_TYPE_STRING,
+	},
+}
 
 sub obj2json {
 	my ($obj, $opts_hr) = @_;
@@ -55,27 +76,6 @@ sub obj2json {
 	return $json;
 }
 
-sub json2obj {
-	my $json = shift;
-
-	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
-
-	return Wikibase::Datatype::Struct::Value::Globecoordinate::struct2obj($struct_hr);
-}
-
-sub json_type {
-	return {
-		'value' => {
-			'altitude' => JSON_TYPE_FLOAT_OR_NULL,
-			'globe' => JSON_TYPE_STRING,
-			'latitude' => JSON_TYPE_FLOAT,
-			'longitude' => JSON_TYPE_FLOAT,
-			'precision' => JSON_TYPE_FLOAT,
-		},
-		'type' => JSON_TYPE_STRING,
-	},
-}
-
 1;
 
 __END__
@@ -90,10 +90,11 @@ Wikibase::Datatype::JSON::Value::Globecoordinate - Wikibase globe coordinate JSO
 
 =head1 SYNOPSIS
 
- use Wikibase::Datatype::JSON::Value::Globecoordinate qw(obj2json json2obj);
+ use Wikibase::Datatype::JSON::Value::Globecoordinate qw(json2obj json_type obj2json);
 
- my $json = obj2json($obj, $opts_hr);
  my $obj = json2obj($json);
+ my $json_type_hr = json_type($obj);
+ my $json = obj2json($obj, $opts_hr);
 
 =head1 DESCRIPTION
 
@@ -101,6 +102,22 @@ This conversion is between objects defined in Wikibase::Datatype and structures
 serialized via JSON to MediaWiki.
 
 =head1 SUBROUTINES
+
+=head2 C<json2obj>
+
+ my $obj = json2obj($json);
+
+Convert JSON structure of globe coordinate to object.
+
+Returns Wikibase::Datatype::Value::Globecoordinate instance.
+
+=head2 C<json_type>
+
+ my $json_type_hr = json_type($obj);
+
+Get JSON type defined in L<Cpanel::JSON::XS::Type>.
+
+Returns reference to hash.
 
 =head2 C<obj2json>
 
@@ -114,62 +131,18 @@ C<$opts_hr> is reference to hash with parameters:
 
 Returns JSON string.
 
-=head2 C<json2obj>
-
- my $obj = json2obj($json);
-
-Convert JSON structure of globe coordinate to object.
-
-Returns Wikibase::Datatype::Value::Globecoordinate instance.
-
 =head1 ERRORS
+
+ json2obj():
+         From Wikibase::Datatype::Struct::Value::Globecoordinate::struct2obj():
+                 Structure isn't for 'globecoordinate' datatype.
 
  obj2json():
          Object doesn't exist.
          Object isn't 'Wikibase::Datatype::Value::Globecoordinate'.
          Parameter 'base_uri' is required.
 
- json2obj():
-         From Wikibase::Datatype::Struct::Value::Globecoordinate::struct2obj():
-                 Structure isn't for 'globecoordinate' datatype.
-
 =head1 EXAMPLE1
-
-=for comment filename=value_globecoordinate_obj2json_pretty.pl
-
- use strict;
- use warnings;
-
- use Wikibase::Datatype::Value::Globecoordinate;
- use Wikibase::Datatype::JSON::Value::Globecoordinate qw(obj2json);
-
- # Object.
- my $obj = Wikibase::Datatype::Value::Globecoordinate->new(
-         'value' => [49.6398383, 18.1484031],
- );
-
- # Get JSON.
- my $json = obj2json($obj, {
-         'base_uri' => 'http://test.wikidata.org/entity/',
-         'pretty' => 1,
- });
-
- # Print to output.
- print $json;
-
- # Output:
- # {
- #    "value" : {
- #       "globe" : "http://test.wikidata.org/entity/Q2",
- #       "altitude" : null,
- #       "longitude" : 18.1484031,
- #       "latitude" : 49.6398383,
- #       "precision" : 1e-07
- #    },
- #    "type" : "globecoordinate"
- # }
-
-=head1 EXAMPLE2
 
 =for comment filename=value_globecoordinate_json2obj.pl
 
@@ -228,6 +201,42 @@ Returns Wikibase::Datatype::Value::Globecoordinate instance.
  # Precision: 1e-07
  # Type: globecoordinate
  # Value: 49.6398383, 18.1484031
+
+=head1 EXAMPLE2
+
+=for comment filename=value_globecoordinate_obj2json_pretty.pl
+
+ use strict;
+ use warnings;
+
+ use Wikibase::Datatype::Value::Globecoordinate;
+ use Wikibase::Datatype::JSON::Value::Globecoordinate qw(obj2json);
+
+ # Object.
+ my $obj = Wikibase::Datatype::Value::Globecoordinate->new(
+         'value' => [49.6398383, 18.1484031],
+ );
+
+ # Get JSON.
+ my $json = obj2json($obj, {
+         'base_uri' => 'http://test.wikidata.org/entity/',
+         'pretty' => 1,
+ });
+
+ # Print to output.
+ print $json;
+
+ # Output:
+ # {
+ #    "value" : {
+ #       "globe" : "http://test.wikidata.org/entity/Q2",
+ #       "altitude" : null,
+ #       "longitude" : 18.1484031,
+ #       "latitude" : 49.6398383,
+ #       "precision" : 1e-07
+ #    },
+ #    "type" : "globecoordinate"
+ # }
 
 =head1 DEPENDENCIES
 
