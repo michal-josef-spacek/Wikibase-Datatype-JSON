@@ -12,9 +12,43 @@ use Wikibase::Datatype::JSON::Value;
 use Wikibase::Datatype::Snak;
 use Wikibase::Datatype::Struct::Value;
 
-Readonly::Array our @EXPORT_OK => qw(obj2json json2obj json_type);
+Readonly::Array our @EXPORT_OK => qw(json2obj json_type obj2json);
 
 our $VERSION = 0.01;
+
+sub json2obj {
+	my $json = shift;
+
+	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
+
+	# Data value isn't required for snaktype 'novalue'.
+	my $datavalue;
+	if (exists $struct_hr->{'datavalue'}) {
+		$datavalue = Wikibase::Datatype::Struct::Value::struct2obj($struct_hr->{'datavalue'});
+	}
+
+	my $obj = Wikibase::Datatype::Snak->new(
+		'datavalue' => $datavalue,
+		'datatype' => $struct_hr->{'datatype'},
+		'property' => $struct_hr->{'property'},
+		'snaktype' => $struct_hr->{'snaktype'},
+	);
+
+	return $obj;
+}
+
+sub json_type {
+	my $obj = shift;
+
+	return {
+		defined $obj->datavalue
+			? ('datavalue' => Wikibase::Datatype::JSON::Value::json_type($obj->datavalue))
+			: (),
+		'datatype' => JSON_TYPE_STRING,
+		'property' => JSON_TYPE_STRING,
+		'snaktype' => JSON_TYPE_STRING_OR_NULL,
+	};
+}
 
 sub obj2json {
 	my ($obj, $opts_hr) = @_;
@@ -54,40 +88,6 @@ sub obj2json {
 	return $json;
 }
 
-sub json2obj {
-	my $json = shift;
-
-	my $struct_hr = Cpanel::JSON::XS->new->decode($json);
-
-	# Data value isn't required for snaktype 'novalue'.
-	my $datavalue;
-	if (exists $struct_hr->{'datavalue'}) {
-		$datavalue = Wikibase::Datatype::Struct::Value::struct2obj($struct_hr->{'datavalue'});
-	}
-
-	my $obj = Wikibase::Datatype::Snak->new(
-		'datavalue' => $datavalue,
-		'datatype' => $struct_hr->{'datatype'},
-		'property' => $struct_hr->{'property'},
-		'snaktype' => $struct_hr->{'snaktype'},
-	);
-
-	return $obj;
-}
-
-sub json_type {
-	my $obj = shift;
-
-	return {
-		defined $obj->datavalue
-			? ('datavalue' => Wikibase::Datatype::JSON::Value::json_type($obj->datavalue))
-			: (),
-		'datatype' => JSON_TYPE_STRING,
-		'property' => JSON_TYPE_STRING,
-		'snaktype' => JSON_TYPE_STRING_OR_NULL,
-	};
-}
-
 1;
 
 __END__
@@ -102,10 +102,11 @@ Wikibase::Datatype::JSON::Snak - Wikibase snak JSON structure serialization.
 
 =head1 SYNOPSIS
 
- use Wikibase::Datatype::JSON::Snak qw(obj2json json2obj);
+ use Wikibase::Datatype::JSON::Snak qw(json2obj json_type obj2json);
 
- my $json = obj2json($obj, $opts_hr);
  my $obj = json2obj($json);
+ my $json_type_hr = json_type($obj);
+ my $json = obj2json($obj, $opts_hr);
 
 =head1 DESCRIPTION
 
@@ -113,6 +114,22 @@ This conversion is between objects defined in Wikibase::Datatype and structures
 serialized via JSON to MediaWiki.
 
 =head1 SUBROUTINES
+
+=head2 C<json2obj>
+
+ my $obj = json2obj($json);
+
+Convert JSON structure of snak to object.
+
+Returns Wikibase::Datatype::Snak instance.
+
+=head2 C<json_type>
+
+ my $json_type_hr = json_type($obj);
+
+Get JSON type defined in L<Cpanel::JSON::XS::Type>.
+
+Returns reference to hash.
 
 =head2 C<obj2json>
 
@@ -126,14 +143,6 @@ C<$opts_hr> is reference to hash with parameters:
 
 Returns JSON string.
 
-=head2 C<json2obj>
-
- my $obj = json2obj($json);
-
-Convert JSON structure of snak to object.
-
-Returns Wikibase::Datatype::Snak instance.
-
 =head1 ERRORS
 
  obj2json():
@@ -142,51 +151,6 @@ Returns Wikibase::Datatype::Snak instance.
          Parameter 'base_uri' is required.
 
 =head1 EXAMPLE1
-
-=for comment filename=snak_obj2json_pretty.pl
-
- use strict;
- use warnings;
-
- use Wikibase::Datatype::JSON::Snak qw(obj2json);
- use Wikibase::Datatype::Snak;
- use Wikibase::Datatype::Value::Item;
-
- # Object.
- # instance of (P31) human (Q5)
- my $obj = Wikibase::Datatype::Snak->new(
-          'datatype' => 'wikibase-item',
-          'datavalue' => Wikibase::Datatype::Value::Item->new(
-                  'value' => 'Q5',
-          ),
-          'property' => 'P31',
- );
-
- # Get JSON.
- my $json = obj2json($obj, {
-          'base_uri' => 'http://test.wikidata.org/entity/',
-          'pretty' => 1,
- });
-
- # Print to output.
- print $json;
-
- # Output:
- # {
- #    "datavalue" : {
- #       "type" : "wikibase-entityid",
- #       "value" : {
- #          "id" : "Q5",
- #          "numeric-id" : 5,
- #          "entity-type" : "item"
- #       }
- #    },
- #    "property" : "P31",
- #    "snaktype" : "value",
- #    "datatype" : "wikibase-item"
- # }
-
-=head1 EXAMPLE2
 
 =for comment filename=snak_json2obj.pl
 
@@ -233,6 +197,51 @@ Returns Wikibase::Datatype::Snak instance.
  # Property: P31
  # Type: wikibase-item
  # Value: Q5
+
+=head1 EXAMPLE2
+
+=for comment filename=snak_obj2json_pretty.pl
+
+ use strict;
+ use warnings;
+
+ use Wikibase::Datatype::JSON::Snak qw(obj2json);
+ use Wikibase::Datatype::Snak;
+ use Wikibase::Datatype::Value::Item;
+
+ # Object.
+ # instance of (P31) human (Q5)
+ my $obj = Wikibase::Datatype::Snak->new(
+          'datatype' => 'wikibase-item',
+          'datavalue' => Wikibase::Datatype::Value::Item->new(
+                  'value' => 'Q5',
+          ),
+          'property' => 'P31',
+ );
+
+ # Get JSON.
+ my $json = obj2json($obj, {
+          'base_uri' => 'http://test.wikidata.org/entity/',
+          'pretty' => 1,
+ });
+
+ # Print to output.
+ print $json;
+
+ # Output:
+ # {
+ #    "datavalue" : {
+ #       "type" : "wikibase-entityid",
+ #       "value" : {
+ #          "id" : "Q5",
+ #          "numeric-id" : 5,
+ #          "entity-type" : "item"
+ #       }
+ #    },
+ #    "property" : "P31",
+ #    "snaktype" : "value",
+ #    "datatype" : "wikibase-item"
+ # }
 
 =head1 DEPENDENCIES
 

@@ -44,8 +44,8 @@ META.yml
 README
 t/Wikibase-Datatype-JSON-Snak/01-use.t
 t/Wikibase-Datatype-JSON-Snak/02-version.t
-t/Wikibase-Datatype-JSON-Snak/03-obj2json.t
-t/Wikibase-Datatype-JSON-Snak/04-json2obj.t
+t/Wikibase-Datatype-JSON-Snak/03-json2obj.t
+t/Wikibase-Datatype-JSON-Snak/04-obj2json.t
 t/Wikibase-Datatype-JSON-Value-Globecoordinate/01-use.t
 t/Wikibase-Datatype-JSON-Value-Globecoordinate/02-version.t
 t/Wikibase-Datatype-JSON-Value-Globecoordinate/03-obj2json.t
