@@ -5,19 +5,21 @@ use English;
 use Error::Pure::Utils qw(clean);
 use Test::More 'tests' => 17;
 use Test::NoWarnings;
-use Wikibase::Datatype::Struct::Snak;
+use Wikibase::Datatype::JSON::Snak;
 
 # Test.
-my $struct_hr = {
-	'datatype' => 'string',
-	'datavalue' => {
-		'type' => 'string',
-		'value' => '1.1',
-	},
-	'property' => 'P11',
-	'snaktype' => 'value',
-};
-my $ret = Wikibase::Datatype::Struct::Snak::struct2obj($struct_hr);
+my $json = <<'END';
+{
+  "datavalue":{
+    "type":"string",
+    "value":"1.1"
+  },
+  "snaktype":"value",
+  "property":"P11",
+  "datatype":"string"
+}
+END
+my $ret = Wikibase::Datatype::JSON::Snak::json2obj($json);
 isa_ok($ret, 'Wikibase::Datatype::Snak');
 is($ret->datatype, 'string', 'Method datatype().');
 isa_ok($ret->datavalue, 'Wikibase::Datatype::Value::String');
@@ -25,37 +27,43 @@ is($ret->property, 'P11', 'Method property().');
 is($ret->snaktype, 'value', 'Method snaktype().');
 
 # Test.
-$struct_hr = {
-	'datatype' => 'wikibase-item',
-	'property' => 'P11',
-	'snaktype' => 'novalue',
-};
-$ret = Wikibase::Datatype::Struct::Snak::struct2obj($struct_hr);
+$json = <<'END';
+{
+  "snaktype":"novalue",
+  "property":"P11",
+  "datatype":"string"
+}
+END
+$ret = Wikibase::Datatype::JSON::Snak::json2obj($json);
 isa_ok($ret, 'Wikibase::Datatype::Snak');
-is($ret->datatype, 'wikibase-item', 'Method datatype().');
+is($ret->datatype, 'string', 'Method datatype().');
 is($ret->datavalue, undef, 'No value.');
 is($ret->property, 'P11', 'Method property().');
 is($ret->snaktype, 'novalue', 'Method snaktype().');
 
 # Test.
-$struct_hr = {
-	'datatype' => 'wikibase-item',
-	'property' => 'P11',
-	'snaktype' => 'somevalue',
-};
-$ret = Wikibase::Datatype::Struct::Snak::struct2obj($struct_hr);
+$json = <<'END';
+{
+  "snaktype":"somevalue",
+  "property":"P11",
+  "datatype":"string"
+}
+END
+$ret = Wikibase::Datatype::JSON::Snak::json2obj($json);
 isa_ok($ret, 'Wikibase::Datatype::Snak');
-is($ret->datatype, 'wikibase-item', 'Method datatype().');
+is($ret->datatype, 'string', 'Method datatype().');
 is($ret->datavalue, undef, 'Some value.');
 is($ret->property, 'P11', 'Method property().');
 is($ret->snaktype, 'somevalue', 'Method snaktype().');
 
 # Test.
-$struct_hr = {
-	'datatype' => 'wikibase-item',
-};
+$json = <<'END';
+{
+  "datatype":"wikibase-item"
+}
+END
 eval {
-	Wikibase::Datatype::Struct::Snak::struct2obj($struct_hr);
+	Wikibase::Datatype::JSON::Snak::json2obj($json);
 };
 is($EVAL_ERROR, "Parameter 'datavalue' is required.\n",
 	"Parameter 'datavalue' is required.");
