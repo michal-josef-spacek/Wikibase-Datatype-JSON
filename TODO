@@ -1,7 +1,8 @@
 TODO
 ====
 3. Tests for json_type()
-4.
+4. Check for base_uri (/ on the end)
+5.
 
 Applied
 =======
