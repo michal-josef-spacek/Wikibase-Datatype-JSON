@@ -19,7 +19,7 @@ my $obj = Wikibase::Datatype::Snak->new(
 	'property' => 'P11',
 );
 my $ret = Wikibase::Datatype::JSON::Snak::obj2json($obj, {
-	'base_uri' => 'https://test.wikidata.org/entity',
+	'base_uri' => 'https://test.wikidata.org/entity/',
 });
 my $expected = <<'END';
 {
@@ -41,7 +41,7 @@ $obj = Wikibase::Datatype::Snak->new(
 	'snaktype' => 'novalue',
 );
 $ret = Wikibase::Datatype::JSON::Snak::obj2json($obj, {
-	'base_uri' => 'https://test.wikidata.org/entity',
+	'base_uri' => 'https://test.wikidata.org/entity/',
 });
 $expected = <<'END';
 {
@@ -59,7 +59,7 @@ $obj = Wikibase::Datatype::Snak->new(
 	'snaktype' => 'somevalue',
 );
 $ret = Wikibase::Datatype::JSON::Snak::obj2json($obj, {
-	'base_uri' => 'https://test.wikidata.org/entity',
+	'base_uri' => 'https://test.wikidata.org/entity/',
 });
 $expected = <<'END';
 {
