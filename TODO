@@ -2,7 +2,17 @@ TODO
 ====
 3. Tests for json_type()
 4. Check for base_uri (/ on the end)
-5.
+5. Add Form
+6. Add Item
+7. Add Language
+8. Add Lexeme
+9. Add Mediainfo
+10. Add MediainfoSnak
+11. Add MediainfoStatement
+12. Add Property
+13. Add Sense
+14. Add Sitelink
+15.
 
 Applied
 =======
